@@ -1,2 +1,8 @@
 lxml==3.5.0
 wheel==0.29.0
+
+# tests dependencies
+coverage==4.0.3
+pep8==1.7.0
+pylint==1.5.4
+nose==1.3.7
