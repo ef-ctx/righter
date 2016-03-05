@@ -97,8 +97,6 @@ def parse(xml_file_name):
                     controller.update_text(element.text)
                 elif event == 'end':
                     children = element.getchildren()
-                    if children:
-                        controller.update_text(children[-1].tail)
             elif element.tag == 'change':
                 if event == 'start':
                     controller.start_change()
