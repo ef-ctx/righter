@@ -4,6 +4,9 @@ PROJECT_CODE = $(PROJECT_HOME)/src
 PROJECT_TEST = $(PROJECT_HOME)/tests
 NEW_PYTHONPATH = $(PROJECT_CODE):$(PYTHONPATH)
 
+.PHONY: tests
+
+
 clean:
 	@echo "Cleaning up *.pyc, *.sw[a-z] and *~ files"
 	@find . -name "*.pyc" -delete
@@ -28,7 +31,7 @@ lint:
 
 style: pep8 pep8_tests lint
 
-tests: clean lint pep8 pep8_tests
+tests:
 	@echo "Running unit and integration and acceptance tests..."
 	@nosetests -s  --cover-branches --cover-erase --with-coverage --cover-inclusive --cover-package=$(PROJECT_NAME) --tests=$(PROJECT_TEST) --with-xunit
 
