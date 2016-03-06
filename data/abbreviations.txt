@@ -1,0 +1,327 @@
+abbr. - abbreviation, abbreviated
+acad. - academic, academy
+adm. - administration, admiral
+agr. / agri. / agric. - agricultural, agriculture
+app. - appended, appendix, appointed
+assn. - association
+bact. - bacteria, bacteriology
+bib. - Bible, biblical
+biog. - biographer, biography, biographical
+bk. - bank, block, book
+bldg. - building
+bot. - botanical, botany
+brig. - brigade, brigadier
+bro. - brother
+c.a. - chartered accountant, chief accountant, commercial agent, consular agent, controller of accounts
+cap. - capital, capitalize
+cath. - cathedral
+cent. - centigrade, centimeter, central, century
+ch. - chaplain, chapter, check (chess), chief, child, children, Latin chirurgia - surgery, church
+chem. - chemical, chemist, chemistry
+chron. - chronology
+cit. - citation, cited, citizen
+clk. - clerk
+co. - company, county
+c.o.d. - cash on delivery, collect on delivery
+colloq. - colloquial, colloquialism
+comdr. - commander
+comp. - compiler, compiled by
+cond. - conductor, conducted by
+cong. - congress
+constr. - construction
+cont. / contd. - continued
+cp. - candlepower, compare
+cr. - credit, creditor, creek
+ct. - carat, cent, court
+cwt. - hundredweight
+d. - pence, penny
+def. - definition, definite
+dep. - department, departure, deposit, depot, deputy
+der. / deriv. - derivation, derivative
+dial. - dialect
+dim. - Italian diminuendo = diminishing in loudness (music)
+dir. - director, directed by
+dist. - distinguished, district
+div. - dividend, division, divorced
+do. - Latin ditto = the same
+doz. - dozen
+dr. - debit, debtor, drachma, dram
+dup. / dupl. - duplicate
+e / e. - erg, errors (Baseball)
+eccl. / eccles. - ecclesiastical
+econ. - economic, economics, economy
+e.g. - Latin exempli gratia = for example
+elev. - elevation
+e.m.u. - electromagnetic unit
+ency. / encyc. / encycl. - encyclopedia
+entom. / entomol. - entomologist, entomology
+est. - established, estimate
+etc. - Latin et cetera = and so forth
+ex. - examined, example
+exec. - executive, executor
+f - Italian forte = loud (music)
+fac. / fax - facsimile
+fem. - female, feminine
+ff. / fol. - folios, following
+fin. - finance
+fn. - footnote
+ft = feet, foot
+fwd. - foreword, foreword by
+gal / gall. - gallon
+gen. - gender, genera, general, genus
+geol. - geologic, geologist, geology
+gloss. - glossary
+govt. - government
+gram. - grammar, grammarian
+her. - heraldry
+hort. - horticultural, horticulture
+ht. - height
+id. - Latin idem = the same
+illus. - illustrator, illustration, illustrated by
+in. - inch, inches
+in loc. cit. - Latin in loco citato = in the place cited
+inst. - instant, institute, institution
+introd. - introduction, introduced by
+jour. - journal
+jud. - judicial
+kg - kilogram (note: no period after kg)
+km - kilometer (note: no period after km)
+kw - kilowatt (note: no period after kw)
+l, ll - line, lines
+lang. - language
+lb - Latin libra = pound
+lib. - liberal, library, librarian
+lit. - literally, literary, literature
+lon. / long. - longitude
+mach. - machine, machinist
+maj. - major
+math. - mathematician, mathematics
+mech. - mechanical, mechanics
+mem. / memo - Latin memento = remember, memorandum
+mfr. - manufacture, manufacturer
+mgr. - manager
+misc. - miscellaneous
+mm - millimeter(s), Latin millia = thousands
+mod. - moderate, modern
+mt. / mts. - mount, mountain, mountains
+n / nn - note, notes
+narr. - narrator, narrated by
+nav. - naval, navigation
+n.d. - no date of publication
+no. - number
+n.p. - no place of publication, no publisher
+obit. - obituary
+op. cit. - Latin opere citato = in the work cited
+orig. - original, originally
+p. / pp. - page, pages
+pat. /patd. - patent, patented
+p.d. - Latin per diem = by the day
+perf. - performer, performed by
+phys. - physical, physician, physicist, physics
+ppd. - postpaid, prepaid
+prin. - principal, principle
+pro tem. - Latin pro tempore = for the time being
+pseud. - pseudonym
+pt - pint (note: no period after pt)
+pub. / publ. - public, publisher, publication, published by
+q. - quarto, question
+qt - quart (note: no period after qt)
+qtd. - quoted
+quot. - quotation
+quot. - quotation
+ref. - referee, reference, reformed
+rel. - release
+riv. - river
+rps - revolutions per second
+s. - saint, second, semi, shilling, silver, sire, solo, son, soprano, south
+sch. - school
+sculp / sculp. - sculptor, sculptural, sculpture
+sec. / secy. - secretary
+ser. - series
+[sic.] - thus in the source (exactly as quoted)
+sol. - solicitor
+sq. - square, sequence
+subj. - subject, subjective, subjunctive
+supt. - superintendent
+sym. - symbol, symphony
+t. - temperature, tempo, (Latin tempore = in the time of), tenor, tense (grammar), territory, time, ton(s), town, transitive, troy (weight)
+tel. - telegram, telegraph, telephone
+terr. - territory
+topog. - topographical, topography
+treas. - treasurer, treasury
+tsp. - teaspoon
+ult. - ultimate
+usu. - usually
+v. - verb, verse, versus, Latin vide = see, voltage, von (German name)
+vb. - verb
+vet. - veteran, veterinary
+vet. - veteran, veterinary
+vox. pop. - Latin vox populi = voice of the people
+vs. / v. - Latin versus = against
+v.s. - Latin vide supra = see above
+writ. - writer, written by
+yd - yard(s)
+zn - zinc
+abr. - abridged, abridgment
+adj. - adjective, adjourned, adjustment
+adv. - adverb
+anon. - anonymous
+approx. - approximately
+b. - base, bass, bat, battery, bay, book, born, brother
+bap. - baptized
+bibliog. - bibliographer, bibliography, bibliographic
+biol. - biology
+bkg. - banking
+blvd. - boulevard
+bp. - bishop
+brig. gen. - brigadier general
+bur. - bureaus
+cal. - calendar, caliber, small calorie
+capt. - captain
+cc / cc. / c.c. - cubic centimeters
+cf. - Latin confer = compare
+chap. - chaplain, chapter
+chm. - chairman, checkmate (chess)
+cir. /circ. - circular, Latin circa = about
+civ. - civil, civilian
+cm / cm. - centimeter(s)
+c.o. / c/o - care of, carried over
+col. - collected, collector, college, colonel, colonial, colony, column
+com. - comedy, command, commandant, commerce, commercial, commission(er), committee, commodore, common, communication, community
+comr. - commissioner
+con. - concerto, consolidated, consul
+conf. - conference
+consol. - consolidated
+cont. - containing, contents, continent, continental, continue, continued
+corp. - corporal, corporation
+cpl. - corporal
+crit. - criticism
+cu. - cubic
+d. - dam (pedigrees), date, daughter, day(s), dead, democrat, density, diameter, died
+dec. - deceased, declaration, declension, declination, decrease, Italian deprescendo = decreasing in loudness (music),
+deg. - degree(s)
+dept. - department, deputy
+diag. - diagram
+dict. - dictionary
+dipl. - diplomat, diplomatic
+disc. - discount, discovered
+distr. - distribution, distributed by
+dm / dm. - decameter, decimeter
+doc. - document
+dpt. - department
+d.t. - delirium tremens, double time
+dwt. - pennyweight
+ea. - each
+ecol. - ecology
+ed. - edited, edited by, edition, editor
+elec. / elect. - electric, electrical, electrician, electricity
+emp. - emperor, empire, empress
+enc. - enclosed
+eng. - engineer, engineering, engraved
+esp. - especially
+et al. - Latin et alibi = and elsewhere, Latin et alii, et aliae = and others
+et seq. - Latin et sequens = and the following, Latin et sequentes or seqentia = and those that follow
+exch. - exchange, exchequer
+ex lib. - Latin ex libris = from the books of
+f. - farad, father, farthing, fathom, feminine, fluid (ounce), folio, following, franc, frequency
+fed. - federal, federated, federation
+ff - Italian fortissimo = very loud (music)
+fig. - figure
+fl. - florin, flourished, fluid
+fr. - fragment, franc, from
+ft. - fort
+g / g. / gm - gram
+gaz. - gazette, gazetteer
+geog. - geographer, geographical, geography
+geom. - geometric, geometry
+gov. - governor
+gr - grain(s), gram(s)
+hab. corp. - Latin habeas corpus = that you have the body
+hist. - historian, historical, history
+hr - hour(s)
+ib. / ibid. - Latin ibidem = in the same place
+i.e. - Latin id est = that is
+imp. - imperative, imperial, imports, Latin imprimatur = let it be printed
+inc. - including, income, incorporated
+ins. - inches, insurance
+intl. - international
+is. - island, isle
+jr. - junior
+k. - kilo, kilogram, thousand
+kilo. - kilogram, kilometer
+kt. - carat
+l - liter
+lab. - laboratory
+lat. - latitude
+l.c. - Latin loco citato = in the place cited
+lieut. / lt. - lieutenant
+ltd. - limited
+m. - male, married, meridian, Latin meridies = noon, meter, mile, minute, month
+mag. - magazine
+mas. / masc. - masculine
+mdse. - merchandise
+med. - medical, medicine, medieval
+mfg. - manufacturing
+mg / mg. / mgm - milligram
+mi - miles, mill (note: no period after mi)
+ml / ml. - milliliter
+mo. - month(s)
+ms. / mss. - manuscript, manuscripts
+mus. - museum, music, musician
+n. - noun
+natl. - national
+n.b. - Latin nota bene = mark well, take notice
+neg. - negative
+non seq. - Latin non sequitur = it does not follow
+n. pag. - no page number
+obj. - object, objective
+orch. - orchestra, orchestrated by
+oz. - ounce (Italian abbrev. of onza)
+par. - paragraph, parallel
+pct. - percent
+pen. - peninsular
+philos. - philosopher, philosophy
+pl. - plate, plural
+pref. - preface, preface by
+prod. - produced by, producer, production
+pron. - pronoun, pronunciation
+psych. / psychol. - psychological, psychologist, psychology
+pt. - part, payment, point, port
+pwt - pennyweight (note: no period after pwt)
+qr. - quarter
+qt. - quiet (slang)
+ques. - question
+r.b.i. / rbi / RBI - run(s) batted in (Baseball)
+rec. - receipt, recipe, record, recorded
+reg. - regent, regiment, region, registered, registrar, regular, regulation
+rev. - review, reviewed by, revision, revised, revised by
+rpm - revolutions per minute
+rpt. - reprint, reprinted by
+sc. - scene
+sci. - science, scientific, scientist
+sec - secant, second(s)
+sec. / sect. - section
+serg. / sergt. / sgt. - sergeant
+sing. - singular
+sp. - special, species, specific, specimen, spelling, spirit
+sub. - submarine, substitute, suburb
+sup. - superior, supplement, supply, (Latin supra = above), supreme
+surg. - surgeon, surgery
+syn. - synonym, synonymous
+tbs. / tbsp. - tablespoon
+temp. - temperature, temporary
+theol. - theologian, theological, theology
+trans. / tr. - translated by, translation, translator
+trig. / trigon. - trigonometric, trigonometry
+twp. - township
+univ. - universal, university
+uv - ultraviolet (note: no period after uv)
+var. - variant
+vers. - version
+viz. - Latin videlicet = namely
+vol. - volcano, volume
+v.p. - vice president, vice principal
+vs. / vss. - verse, verses
+wpm - words per minute
+wt - weight (no period after wt)
+yr - year
