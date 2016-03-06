@@ -1,0 +1,26 @@
+#!/bin/sh
+
+set -e
+
+if [ -z "$1" ]; then
+    echo Usage: $0 '<xml file name>' > /dev/stderr
+    cat <<EOF
+This command fixes english town XML file in a way it is parsable by echo our
+python script.
+
+Currently the substitutions are:
+    - Change <user>...</url> to <user>...</user> in metadata
+    - Remove non printable characters
+    - Substitute & to &amp;
+    - Wrap everything inside text with <![CDATA[]]>
+EOF
+    exit 1
+fi
+
+sed -i\
+    -e 's#\(<user>[^<]\+\)</url>#\1</user>#'\
+    -e 's#[^[:print:]]# #g'\
+    -e 's#&\([^a][^m][^p][^;]\)#&amp;\1#g'\
+    -e 's#<text>\([^<]\)#<text><![CDATA[\1#'\
+    -e 's#\([^>]\)</text>#\1]]></text>#'\
+    $1
