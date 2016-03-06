@@ -1,6 +1,11 @@
 import sys
+import io
+import logging
+import collections
 
 from lxml import etree
+
+logger = logging.getLogger("righter")
 
 
 class StateController:
@@ -10,8 +15,12 @@ class StateController:
         self.change = {}
         self.inside_writing = False
         self.inside_change = False
+        self.writing_failed = False
+        self.current_writing = None
 
-    def start_writing(self):
+    def start_writing(self, writing_id):
+        self.current_writing = writing_id
+        self.writing_failed = False
         self.writing = {
             "text": "",
             "changes": [],
@@ -33,13 +42,15 @@ class StateController:
         self.writing["text"] += self.change.get("selection", "") or ""
 
     def set_selection(self, selection):
-        self.change["selection"] = selection
+        if selection:
+            self.change["selection"] = selection
 
     def set_symbol(self, symbol):
         self.change["symbol"] = symbol
     
     def set_correct(self, correct):
-        self.change["correct"] = correct
+        if correct:
+            self.change["correct"] = correct
 
     @property
     def offset(self):
@@ -48,6 +59,27 @@ class StateController:
     def update_text(self, text):
         if text:
             self.writing["text"] += text
+
+
+def _parse_text(controller, blob):
+    """Parses blob, extracted from text CDATA using XML Parser."""
+    for event, element in etree.iterparse(io.BytesIO(blob.encode('utf8')), events=('start', 'end')):
+        if element.tag == 'text' and event == 'start':
+            controller.update_text(element.text)
+        elif element.tag == 'change':
+            if event == 'start':
+                controller.start_change()
+            elif event == 'end':
+                controller.end_change()
+                controller.update_text(element.tail)
+        elif element.tag == 'selection' and event == 'end':
+            controller.set_selection(element.text)
+        elif element.tag == 'symbol' and event == 'end':
+            controller.set_symbol(element.text)
+        elif element.tag == 'correct' and event == 'end':
+            controller.set_correct(element.text)
+        elif not controller.inside_change and event == 'end':
+            controller.update_text(element.tail)
 
 
 def parse(xml_file_name):
@@ -83,40 +115,32 @@ def parse(xml_file_name):
             - correct: if this field exists it is the teacher suggested correction
     """
     controller = StateController()
-    writings = []
-    with open(xml_file_name, 'rb') as fp:
-        for event, element in etree.iterparse(fp, events=('start', 'end')):
-            if element.tag == 'writing':
-                if event == 'start':
-                    controller.start_writing()
-                elif event == 'end':
-                    controller.end_writing()
-                    writings.append(controller.writing)
-            elif element.tag == 'text':
-                if event == 'start':
-                    controller.update_text(element.text)
-                elif event == 'end':
-                    children = element.getchildren()
-            elif element.tag == 'change':
-                if event == 'start':
-                    controller.start_change()
-                elif event == 'end':
-                    controller.end_change()
-                    controller.update_text(element.tail)
-            elif element.tag == 'selection' and event == 'end':
-                if element.text:
-                    controller.set_selection(element.text)
-            elif element.tag == 'symbol' and event == 'end':
-                controller.set_symbol(element.text)
-            elif element.tag == 'correct' and event == 'end':
-                if element.text:
-                    controller.set_correct(element.text)
-            elif controller.inside_writing and not controller.inside_change:
-                if event == 'end':
-                    controller.update_text(element.tail)
-    return writings
+    for event, element in etree.iterparse(xml_file_name, events=('start', 'end')):
+        if element.tag == 'writing':
+            if event == 'start':
+                controller.start_writing(element.get('id'))
+            elif event == 'end':
+                controller.end_writing()
+                if not controller.writing_failed:
+                    yield controller.writing
+                # keep etree from keeping the entire tree in memory
+                element.clear()
+        elif element.tag == 'text' and event == 'end':
+            try:
+                _parse_text(controller, '<text>{}</text>'.format(element.text))
+            except etree.XMLSyntaxError:
+                logger.warn("Text for writing <%s> is invalid XML", controller.current_writing)
+                controller.writing_failed = True
 
 
 if __name__ == '__main__':
     writings = parse(sys.argv[1])
-    print([w for w in writings if w['changes'] and 'SP' in [change['symbol'] for change in w['changes']]][1])
+    stats = collections.defaultdict(lambda: 0)
+    for w in writings:
+        if w['changes']:
+            for symbol in set(change['symbol'] for change in w['changes']):
+                if symbol == 'SP' and not stats[symbol]:
+                    print(w)
+                stats[symbol] += 1
+    for key, value in sorted(stats.items(), key=lambda x: x[1]):
+        print(key, value)
