@@ -15,6 +15,10 @@ class SpellingTestCase(unittest.TestCase):
             {
                 'selection': 'avilable',
                 'start': 935,
+            },
+            {
+                'selection': 'twon',
+                'start': 1049
             }
         ]
         self.assertEqual(response, expected_response)

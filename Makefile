@@ -4,6 +4,9 @@ PROJECT_CODE = $(PROJECT_HOME)/src
 PROJECT_TEST = $(PROJECT_HOME)/tests
 NEW_PYTHONPATH = $(PROJECT_CODE):$(PYTHONPATH)
 
+.PHONY: tests
+
+
 clean:
 	@echo "Cleaning up *.pyc, *.sw[a-z] and *~ files"
 	@find . -name "*.pyc" -delete

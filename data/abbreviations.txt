@@ -141,6 +141,7 @@ ser. - series
 [sic.] - thus in the source (exactly as quoted)
 sol. - solicitor
 sq. - square, sequence
+sqm. - square meter
 subj. - subject, subjective, subjunctive
 supt. - superintendent
 sym. - symbol, symphony
