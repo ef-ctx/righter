@@ -119,4 +119,4 @@ def parse(xml_file_name):
 
 if __name__ == '__main__':
     writings = parse(sys.argv[1])
-    print([w for w in writings if w['changes'] and 'SP' in [change['symbol'] for change in w['changes']]][0])
+    print([w for w in writings if w['changes'] and 'SP' in [change['symbol'] for change in w['changes']]][1])

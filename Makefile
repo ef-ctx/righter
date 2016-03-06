@@ -31,7 +31,7 @@ lint:
 
 style: pep8 pep8_tests lint
 
-tests: clean lint pep8 pep8_tests
+tests:
 	@echo "Running unit and integration and acceptance tests..."
 	@nosetests -s  --cover-branches --cover-erase --with-coverage --cover-inclusive --cover-package=$(PROJECT_NAME) --tests=$(PROJECT_TEST) --with-xunit
 
