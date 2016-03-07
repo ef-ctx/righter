@@ -37,9 +37,10 @@ class StateController:
         }
 
     def end_change(self):
-        self.inside_change = False
-        self.writing["changes"].append(self.change)
-        self.writing["text"] += self.change.get("selection", "") or ""
+        if self.inside_change:
+            self.inside_change = False
+            self.writing["changes"].append(self.change)
+            self.writing["text"] += self.change.get("selection", "") or ""
 
     def set_selection(self, selection):
         if selection:
@@ -136,9 +137,15 @@ def parse(xml_file_name):
 if __name__ == '__main__':
     writings = parse(sys.argv[1])
     stats = collections.defaultdict(lambda: 0)
+    total = 0
+    total_with_changes = 0
     for w in writings:
         if w['changes']:
+            total_with_changes += 1
             for symbol in set(change['symbol'] for change in w['changes']):
                 stats[symbol] += 1
+        total += 1
     for key, value in sorted(stats.items(), key=lambda x: x[1]):
         print(key, value)
+    print('Total:', total)
+    print('Total with changes:', total_with_changes)
