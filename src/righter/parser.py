@@ -37,10 +37,9 @@ class StateController:
         }
 
     def end_change(self):
-        if self.inside_change:
-            self.inside_change = False
-            self.writing["changes"].append(self.change)
-            self.writing["text"] += self.change.get("selection", "") or ""
+        self.inside_change = False
+        self.writing["changes"].append(self.change)
+        self.writing["text"] += self.change.get("selection", "") or ""
 
     def set_selection(self, selection):
         if selection:
@@ -64,13 +63,14 @@ class StateController:
 
 def _parse_text(controller, blob):
     """Parses blob, extracted from text CDATA using XML Parser."""
-    for event, element in etree.iterparse(io.BytesIO(blob.encode('utf8')), events=('start', 'end')):
+    stream = io.BytesIO(blob.encode('utf8'))
+    for event, element in etree.iterparse(stream, events=('start', 'end')):
         if element.tag == 'text' and event == 'start':
             controller.update_text(element.text)
         elif element.tag == 'change':
             if event == 'start':
                 controller.start_change()
-            elif event == 'end':
+            else:
                 controller.end_change()
                 controller.update_text(element.tail)
         elif element.tag == 'selection' and event == 'end':
@@ -83,8 +83,8 @@ def _parse_text(controller, blob):
             controller.update_text(element.tail)
 
 
-def parse(xml_file_name):
-    """Given a xml_file_name, returns a list of dicts with two keys:
+def parse(xml_file):
+    """Given a xml file-like object, returns a list of dicts with two keys:
         - text: original student writing
         - changes: list of dicts with the fields:
             - symbol: error type, according to the list
@@ -116,11 +116,11 @@ def parse(xml_file_name):
             - correct: if this field exists it is the teacher suggested correction
     """
     controller = StateController()
-    for event, element in etree.iterparse(xml_file_name, events=('start', 'end')):
+    for event, element in etree.iterparse(xml_file, events=('start', 'end')):
         if element.tag == 'writing':
             if event == 'start':
                 controller.start_writing(element.get('id'))
-            elif event == 'end':
+            else:
                 controller.end_writing()
                 if not controller.writing_failed:
                     yield controller.writing
@@ -135,7 +135,8 @@ def parse(xml_file_name):
 
 
 if __name__ == '__main__':
-    writings = parse(sys.argv[1])
+    with open(sys.argv[1], 'rb'):
+        writings = parse(sys.argv[1])
     stats = collections.defaultdict(lambda: 0)
     total = 0
     total_with_changes = 0
