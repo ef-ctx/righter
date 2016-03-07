@@ -139,8 +139,6 @@ if __name__ == '__main__':
     for w in writings:
         if w['changes']:
             for symbol in set(change['symbol'] for change in w['changes']):
-                if symbol == 'SP' and not stats[symbol]:
-                    print(w)
                 stats[symbol] += 1
     for key, value in sorted(stats.items(), key=lambda x: x[1]):
         print(key, value)
