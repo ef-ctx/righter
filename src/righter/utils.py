@@ -21,4 +21,3 @@ def remove_punctuation(text):
     for char in string.punctuation:
         text = text.replace(char, ' ')
     return text
-

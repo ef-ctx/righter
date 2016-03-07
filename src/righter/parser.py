@@ -150,3 +150,10 @@ if __name__ == '__main__':
         print(key, value)
     print('Total:', total)
     print('Total with changes:', total_with_changes)
+    
+#    writings = parse(sys.argv[1])
+#    sample = [w for w in writings if w['changes'] and 'C' in [change['symbol'] for change in w['changes']]][0]
+#    print(sample)
+#    print(sample["text"])
+#    from pprint import pprint
+#    pprint([i for i in sample["changes"] if i["symbol"] == 'C'])

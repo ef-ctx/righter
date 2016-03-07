@@ -5,8 +5,13 @@ sample1 = '\n            \n            \n            \n            \n           
 
 sample2 = '\n            \n            \n            \n            \n            Hi Aunt Jane  How are you! welcome come to The USA!  first ,you can book the ticket throught ticket agent. when you arrive airport,you can take e-ticket by you ID.then check in  .next you need prepare you ID.thanks!  Wuhui\n            '
 
+sample3 = '\n            \n            \n            \n            \n            Dear Polris                                                                                                                                                    I am sorry to hear that you have shoping addiction.now,the following is my suggestion.Firstly, you should  bring  little money when you go out.                                                                      Secondly, you should attand a support group.                                                                                     Finally, in your spare time, you my do some exercise                                                                              yours sincerly\n            '
+
+sample4 = '\n            \n            \n            \n            \n            Hi Aunt Jane  How are you! welcome come to The USA!  first ,you can book the ticket throught ticket agent. when you arrive airport,you can take e-ticket by you ID.then check in  .next you need prepare you ID.thanks!  Wuhui\n            '
 
 class SpellingTestCase(unittest.TestCase):
+
+    maxDiff = None
 
     def test_spelling_sample1(self):
         response = righter.check_spelling(sample1)
@@ -20,18 +25,75 @@ class SpellingTestCase(unittest.TestCase):
                 'start': 935,
             },
             {
-                'selection': 'twon',
+                'selection': 'twon', # teacher didn't catch'
                 'start': 1049
             }
         ]
         self.assertEqual(response, expected_response)
 
-    def test_spelling_sampe2(self):
+    def test_spelling_sample2(self):
         response = righter.check_spelling(sample2)
         expected_response = [
             {
                 'selection': 'throught',
                 'start': 149
+            }
+        ]
+        self.assertEqual(response, expected_response)
+
+
+    def test_spelling_sample3(self):
+        response = righter.check_spelling(sample3)
+        expected_response = [
+            {
+                'selection': 'polris',
+                'start': 70
+            },
+            {
+                'selection': 'shoping',
+                'start': 257
+            },
+            {
+                'selection': 'attand',
+                'start': 458
+            },
+            {
+                'selection': 'sincerly',
+                'start': 702
+            }
+        ]
+        self.assertEqual(response, expected_response)
+
+    def test_capitalization_sample4(self):
+        response = righter.check_capitalization(sample4)
+        expected_response = [
+            {
+                'selection': 'welcome', # start of the phrase
+                'start': 92
+            },
+            {
+                'selection': 'The', # middle phrase in English dict
+                'start': 108
+            },
+            {
+                'selection': 'first', # start of the phrase
+                'start': 118
+            },
+            {
+                'selection': 'when',# start of the phrase
+                'start': 172
+            },
+            {
+                'selection': 'then',# start of the phrase
+                'start': 228
+            },
+            {
+                'selection': 'next',
+                'start': 244
+            },
+            {
+                'start': 273,
+                'selection': 'thanks'
             }
         ]
         self.assertEqual(response, expected_response)
