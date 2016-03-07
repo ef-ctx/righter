@@ -143,8 +143,8 @@ if __name__ == '__main__':
     for w in writings:
         if w['changes']:
             total_with_changes += 1
-            for symbol in set(change['symbol'] for change in w['changes']):
-                stats[symbol] += 1
+            for change in w['changes']:
+                stats[change['symbol']] += 1
         total += 1
     for key, value in sorted(stats.items(), key=lambda x: x[1]):
         print(key, value)
