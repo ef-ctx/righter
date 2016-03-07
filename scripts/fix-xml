@@ -21,6 +21,6 @@ sed -i\
     -e 's#\(<user>[^<]\+\)</url>#\1</user>#'\
     -e 's#[^[:print:]]# #g'\
     -e 's#&\([^a][^m][^p][^;]\)#&amp;\1#g'\
-    -e 's#<text>\([^<]\)#<text><![CDATA[\1#'\
+    -e 's#<text>\([^<]\|$\)#<text><![CDATA[\1#'\
     -e 's#\([^>]\)</text>#\1]]></text>#'\
     $1
