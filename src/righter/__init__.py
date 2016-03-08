@@ -41,7 +41,7 @@ def check_capitalization(text):
         }
     """
     response = []
-    sentences = re.split('[!?.]', text)
+    sentences = re.split('[!?.]', text)  # TODO: add \n
     pos = 0
     for sentence in sentences:
         clean_sentence = sentence.strip()
@@ -54,17 +54,17 @@ def check_capitalization(text):
                 "start": first_word_position
             }
             response.append(item)
-#        else:
-#            # check if a common English word in the middle of the text is
-#            # wrongly capitalized
-#            words = clean_sentence.split()
-#            for word in words[1:]:
-#                if word[0].isupper() and\
-#                   dictionary.is_english_word(word.lower()):
-#                    item = {
-#                        "selection": word,
-#                        "start": text.find(word)
-#                    }
-#                    response.append(item)
+        else:
+            # check if a common English word in the middle of the text is
+            # wrongly capitalized
+            words = clean_sentence.split()
+            for word in words[1:]:
+                if word[0].isupper() and\
+                   dictionary.is_english_word(word.lower()):
+                    item = {
+                        "selection": word,
+                        "start": text.find(word)
+                    }
+                    response.append(item)
         pos += len(sentence) + 1
     return response
