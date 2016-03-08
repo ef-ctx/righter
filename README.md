@@ -2,6 +2,7 @@
 
 Python scripts for identifying common English writing mistakes
 
+
 ## How to get the dataset
 
 Go to
@@ -26,3 +27,13 @@ Eg.:
 
 This will correct the XML file in-place. Now the XML file is ready for being
 further processed.
+
+
+## How to use
+
+After having fixed the XML, this is an example
+
+```
+    python righter/parser.py ../data/EF20130315_selection299.xml ../data/299.txt
+    python analyse.py -i ../data/299.txt --mistake-type NSW
+```
