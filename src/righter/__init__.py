@@ -7,7 +7,22 @@ from righter import dictionary
 from righter import utils
 
 
-def check_spelling(text):
+def findall(sub, string):
+    """
+    >>> text = "Allowed Hello Hollow"
+    >>> tuple(findall('ll', text))
+    (1, 10, 16)
+    """
+    index = 0 - len(sub)
+    try:
+        while True:
+            index = string.index(sub, index + len(sub))
+            yield index
+    except ValueError:
+        pass
+
+
+def check_spelling(original_text):
     """
     Check if a text has spelling errors.
     Return a list with objects:
@@ -16,18 +31,20 @@ def check_spelling(text):
             "start": <position-of-the-first-character-in-string>
         }
     """
-    text = text.lower()
+    text = original_text.lower()
     text = utils.remove_punctuation(text)
     words = text.split()
     response = []
     for word in words:
         if not dictionary.is_english_word(word) and\
            not utils.contains_digit(word):
-            item = {
-                "selection": word,
-                "start": text.find(word)
-            }
-            response.append(item)
+            for pos in findall(word, text):
+                item = {
+                    "selection": original_text[pos: (pos + len(word))],
+                    "start": pos
+                }
+                if item not in response:
+                    response.append(item)
     return response
 
 
