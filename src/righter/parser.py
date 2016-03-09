@@ -18,6 +18,14 @@ class StateController:
         self.inside_change = False
         self.writing_failed = False
 
+    def are_changes_correct(self):
+        for change in self.writing['changes']:
+            if change['symbol'] in ('SP', 'C', 'NSW'):
+                required_keys = {'symbol', 'selection', 'start'}
+                if required_keys - set(change.keys()):
+                    return False
+        return True
+
     def start_writing(self, writing_id):
         self.writing_failed = False
         self.writing = {
@@ -122,7 +130,7 @@ def parse(xml_file):
                 controller.start_writing(element.get('id'))
             else:
                 controller.end_writing()
-                if not controller.writing_failed:
+                if not controller.writing_failed and controller.are_changes_correct():
                     yield controller.writing
                 # keep etree from keeping the entire tree in memory
                 element.clear()
