@@ -70,3 +70,17 @@ def check_capitalization(text):
                     response.append(item)
         pos += len(sentence) + 1
     return response
+
+
+def check(text):
+    changes = []
+
+    for change in check_capitalization(text):
+        change['symbol'] = 'C'
+        changes.append(change)
+
+    for change in check_spelling(text):
+        change['symbol'] = 'SP'
+        changes.append(change)
+
+    return changes
