@@ -1,0 +1,79 @@
+import unittest
+import copy
+from righter.analyse import precision, flatten
+
+annotated = {
+    '1': [
+        {
+            'symbol': 'NSW',
+            'correct': 'always',
+            'start': 127,
+            'selection': 'alway'
+        },
+        {
+            'symbol': 'NSW',
+            'correct': 'terrible',
+            'start': 207,
+            'selection': 'lerible'
+        }
+    ],
+    '2': [
+        {
+            'symbol': 'NSW',
+            'correct': 'never',
+            'start': 22,
+            'selection': 'nev'
+        }
+    ],
+}
+
+class FlattenTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.annotated = copy.deepcopy(annotated) 
+
+    def test_multiple(self):
+        expected = {
+            ('1', 127, 'alway', 'NSW'),
+            ('1', 207, 'lerible', 'NSW'),
+            ('2', 22, 'nev', 'NSW'),
+        }
+        self.assertEqual(flatten(self.annotated), expected)
+
+    def test_one_doc(self):
+        self.annotated.pop('1')
+        expected = {
+            ('2', 22, 'nev', 'NSW'),
+        }
+        self.assertEqual(flatten(self.annotated), expected)
+
+    def test_empty(self):
+        self.assertEqual(flatten({}), set())
+
+
+class AnalysePredictionTestCase(unittest.TestCase):
+
+    def setUp(self):
+        self.annotated = copy.deepcopy(annotated)
+
+    def test_all_correct(self):
+        self.assertEqual(precision(self.annotated, self.annotated), 1.)
+
+    def test_no_predictions_with_annotations(self):
+        self.assertEqual(precision(self.annotated, {}), .0)
+
+    def test_no_predictions_empty_annotations(self):
+        self.assertEqual(precision({}, {}), 1.)
+
+    def test_no_annotations(self):
+        self.assertEqual(precision({}, self.annotated), .0)
+
+    def test_missing_document(self):
+        predicted = copy.deepcopy(self.annotated)
+        predicted.pop('1')
+        self.assertEqual(precision(self.annotated, predicted), 1 / 3.)
+
+    def test_missing_change(self):
+        predicted = copy.deepcopy(self.annotated)
+        predicted['1'].pop()
+        self.assertEqual(precision(self.annotated, predicted), 2 / 3.)

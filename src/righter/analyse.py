@@ -20,6 +20,23 @@ def read_writings(file_name, mistake_type):
     return writings
 
 
+def flatten(writings):
+    return {(key, change['start'], change['selection'], change['symbol']) for key, changes in writings.items() for change in changes}
+
+
+def precision(annotated, predicted):
+    if not annotated:
+        if not predicted:
+            return 1.
+        else:
+            return .0
+
+    annotations = flatten(annotated)
+    predictions = flatten(predicted)
+
+    return len(annotations & predictions) / len(annotations)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--annotated-file', help='Annotated input file', required=True)
