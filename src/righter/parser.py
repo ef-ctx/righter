@@ -87,6 +87,8 @@ def _parse_text(controller, blob):
             controller.set_symbol(element.text)
         elif element.tag == 'correct' and event == 'end':
             controller.set_correct(element.text)
+        elif element.tag == 'br' and event == 'end':
+            controller.update_text('\n{}'.format(element.tail))
         elif not controller.inside_change and event == 'end':
             controller.update_text(element.tail)
 
