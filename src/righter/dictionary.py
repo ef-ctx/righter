@@ -51,8 +51,15 @@ def is_english_abbreviation(text):
     return text in ABBREVIATIONS
 
 
+def is_contraction(text):
+    """
+    Return True if given string is part of a contraction
+    """
+    return text in ["ll", "ve"]
+    
+
 def is_english_word(text):
     """
     Return True if given string is a valid English word.
     """
-    return is_english_abbreviation(text) or (text in WORDS)
+    return is_english_abbreviation(text) or (text in WORDS) or is_contraction(text)
