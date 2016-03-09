@@ -25,16 +25,17 @@ def flatten(writings):
 
 
 def precision(annotated, predicted):
-    if not annotated:
-        if not predicted:
-            return 1.
-        else:
-            return .0
-
     annotations = flatten(annotated)
     predictions = flatten(predicted)
 
-    return len(annotations & predictions) / len(annotations)
+    if not predictions:
+        return 1.
+
+    return len(annotations & predictions) / len(predictions)
+
+
+def recall(annotated, predicted):
+    return 0
 
 
 if __name__ == "__main__":
