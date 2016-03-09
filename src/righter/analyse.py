@@ -63,6 +63,33 @@ def show_comparison(baseline, predicted):
     print(table.table)
 
 
+def flatten(writings):
+    """Flatten a dict of writings into a list of tuples. Notice that we are
+    ignoring correct key right now. This is deliberated: we still do not
+    support correction but only error flaging"""
+    return {(key, change['start'], change['selection'], change['symbol']) for key, changes in writings.items() for change in changes}
+
+
+def precision(annotated, predicted):
+    annotations = flatten(annotated)
+    predictions = flatten(predicted)
+
+    if not predictions:
+        return 1.
+
+    return len(annotations & predictions) / len(predictions)
+
+
+def recall(annotated, predicted):
+    annotations = flatten(annotated)
+    predictions = flatten(predicted)
+
+    if not annotations:
+        return 1.
+
+    return len(annotations & predictions) / len(annotations)
+
+
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--annotated-file', help='Annotated input file', required=True)
@@ -76,4 +103,10 @@ if __name__ == "__main__":
     predicted = read_writings(args.predicted_file, args.mistake_type)
     if args.analysis_type in ["all", "qualitative"]:
         show_comparison(annotated, predicted)
+
+    if args.analysis_type in ["all", 'quantitative']:
+        annotated = map_id_to_field(annotated, "changes")
+        predicted = map_id_to_field(predicted, "changes")
+        print('Precision:', precision(annotated, predicted))
+        print('Recall:', recall(annotated, predicted))
 
