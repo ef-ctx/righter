@@ -35,5 +35,5 @@ After having fixed the XML, this is an example
 
 ```
     python righter/parser.py ../data/EF20130315_selection299.xml ../data/299.txt
-    python analyse.py -i ../data/299.txt --mistake-type NSW
+    python righter/analyse.py -i ../data/299.txt --mistake-type NSW
 ```
