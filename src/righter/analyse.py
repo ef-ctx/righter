@@ -35,7 +35,13 @@ def precision(annotated, predicted):
 
 
 def recall(annotated, predicted):
-    return 0
+    annotations = flatten(annotated)
+    predictions = flatten(predicted)
+
+    if not annotations:
+        return 1.
+
+    return len(annotations & predictions) / len(annotations)
 
 
 if __name__ == "__main__":
