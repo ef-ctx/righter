@@ -45,6 +45,8 @@ def check_capitalization(text):
     pos = 0
     for sentence in sentences:
         clean_sentence = sentence.strip()
+        if not clean_sentence:
+            continue
         # Check if first character is capital
         if clean_sentence[0].islower():
             first_word = clean_sentence.split()[0]
