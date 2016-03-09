@@ -45,6 +45,8 @@ def check_capitalization(text):
     pos = 0
     for sentence in sentences:
         clean_sentence = sentence.strip()
+        if not clean_sentence:
+            continue
         # Check if first character is capital
         if clean_sentence[0].islower():
             first_word = clean_sentence.split()[0]
@@ -68,3 +70,17 @@ def check_capitalization(text):
                     response.append(item)
         pos += len(sentence) + 1
     return response
+
+
+def check(text):
+    changes = []
+
+    for change in check_capitalization(text):
+        change['symbol'] = 'C'
+        changes.append(change)
+
+    for change in check_spelling(text):
+        change['symbol'] = 'SP'
+        changes.append(change)
+
+    return changes
