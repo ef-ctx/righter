@@ -1,7 +1,6 @@
 import argparse
 import json
 
-
 def filter_changes(changes, mistake_type):
     if mistake_type is not None:
         return [c for c in changes if c["symbol"] == mistake_type]
