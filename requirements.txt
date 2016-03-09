@@ -1,5 +1,6 @@
 lxml==3.5.0
 wheel==0.29.0
+terminaltables==2.1.0
 
 # tests dependencies
 coverage==4.0.3
