@@ -17,12 +17,11 @@ class StateController:
         self.inside_writing = False
         self.inside_change = False
         self.writing_failed = False
-        self.current_writing = None
 
     def start_writing(self, writing_id):
-        self.current_writing = writing_id
         self.writing_failed = False
         self.writing = {
+            "id": writing_id,
             "text": "",
             "changes": [],
         }
@@ -131,7 +130,7 @@ def parse(xml_file):
             try:
                 _parse_text(controller, '<text>{}</text>'.format(element.text))
             except etree.XMLSyntaxError:
-                logger.warn("Text for writing <%s> is invalid XML", controller.current_writing)
+                logger.warn("Text for writing <%s> is invalid XML", controller.writing.get('id'))
                 controller.writing_failed = True
 
 
