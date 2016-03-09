@@ -32,6 +32,7 @@ def check_spelling(original_text):
         }
     """
     text = original_text.lower()
+    text = text.replace("’", "'")
     text = utils.remove_punctuation(text)
     words = text.split()
     response = []
