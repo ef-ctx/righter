@@ -4,7 +4,7 @@ import textwrap
 from terminaltables import AsciiTable
 
 
-TEXTWRAP = 80
+TEXTWRAP = 40
 
 
 def filter_changes(writing, mistake_type):
@@ -55,9 +55,9 @@ def show_qualitative(baseline, predicted):
     for id_, text in writings_dict.items():
         text = format_text(text)
         baseline = format_changes(baseline_dict[id_])
-        predicted = format_changes(predicted_dict[id_])
+        predicted = format_changes(predicted_dict.get(id_, []))
         base = flatten2(id_, baseline_dict[id_])
-        prediction = flatten2(id_, predicted_dict[id_])
+        prediction = flatten2(id_, predicted_dict.get(id_, []))
         prec = "{}".format(precision(base, prediction))
         rec = "{}".format(recall(base, prediction))
         row = [id_, text, baseline, predicted, prec, rec]

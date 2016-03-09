@@ -35,5 +35,10 @@ After having fixed the XML, this is an example
 
 ```
     python righter/parser.py ../data/EF20130315_selection299.xml ../data/299.txt
-    python righter/analyse.py -i ../data/299.txt -p ../data/299.txt  --mistake-type NSW
+    python righter/analyse.py -i ../data/299.txt -p ../data/299-predictions.txt  --mistake-type SP
+```
+
+Generate a prediction
+```
+    PYTHONPATH='src':$PYTHONPATH python -m righter.predict -i data/299.txt -o data/299-predictions.txt
 ```
