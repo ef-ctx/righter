@@ -43,9 +43,9 @@ def format_text(text):
     return "\n".join(chunks)
 
 
-def show_comparison(baseline, predicted):
+def show_qualitative(baseline, predicted):
     data = []
-    headers = ["id", "text", "baseline", "predicted"]
+    headers = ["id", "text", "baseline", "predicted", "precision", "recall"]
     data.append(headers)
     
     baseline_dict = map_id_to_field(baseline, "changes")
@@ -56,8 +56,24 @@ def show_comparison(baseline, predicted):
         text = format_text(text)
         baseline = format_changes(baseline_dict[id_])
         predicted = format_changes(predicted_dict[id_])
-        row = [id_, text, baseline, predicted]
+        base = flatten2(id_, baseline_dict[id_])
+        prediction = flatten2(id_, predicted_dict[id_])
+        prec = "{}".format(precision(base, prediction))
+        rec = "{}".format(recall(base, prediction))
+        row = [id_, text, baseline, predicted, prec, rec]
         data.append(row)
+    table = AsciiTable(data)
+    table.inner_row_border = True
+    print(table.table)
+
+
+def show_quantitative(annotated, predicted):
+    annotated = flatten(map_id_to_field(annotated, "changes"))
+    predicted = flatten(map_id_to_field(predicted, "changes"))
+    data = [
+        ["precision", "{}".format(precision(annotated, predicted))],
+        ["recall", "{}".format(recall(annotated, predicted))]
+    ]
     table = AsciiTable(data)
     table.inner_row_border = True
     print(table.table)
@@ -70,20 +86,17 @@ def flatten(writings):
     return {(key, change['start'], change['selection'], change['symbol']) for key, changes in writings.items() for change in changes}
 
 
-def precision(annotated, predicted):
-    annotations = flatten(annotated)
-    predictions = flatten(predicted)
+def flatten2(id_, changes):
+    return {(id_, change['start'], change['selection'], change['symbol']) for change in changes}
 
+def precision(annotations, predictions):
     if not predictions:
         return 1.
 
     return len(annotations & predictions) / len(predictions)
 
 
-def recall(annotated, predicted):
-    annotations = flatten(annotated)
-    predictions = flatten(predicted)
-
+def recall(annotations, predictions):
     if not annotations:
         return 1.
 
@@ -102,11 +115,10 @@ if __name__ == "__main__":
     annotated = read_writings(args.annotated_file, args.mistake_type)
     predicted = read_writings(args.predicted_file, args.mistake_type)
     if args.analysis_type in ["all", "qualitative"]:
-        show_comparison(annotated, predicted)
+        print("\nDetailed comparison")
+        show_qualitative(annotated, predicted)
 
     if args.analysis_type in ["all", 'quantitative']:
-        annotated = map_id_to_field(annotated, "changes")
-        predicted = map_id_to_field(predicted, "changes")
-        print('Precision:', precision(annotated, predicted))
-        print('Recall:', recall(annotated, predicted))
+        print("\nSummary")
+        show_quantitative(annotated, predicted)
 
