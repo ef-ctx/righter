@@ -68,11 +68,12 @@ if __name__ == "__main__":
     parser.add_argument('-i', '--annotated-file', help='Annotated input file', required=True)
     parser.add_argument('-p', '--predicted-file', help='Predicted input file', required=True)
     parser.add_argument('-m', '--mistake-type', help='Type of mistake', choices=['AR', 'C', 'SP', 'NSW'])
-    parser.add_argument('-t', '--analysis-type', help='Type of analysis', default='quantitative', choices=['quantitative', 'qualitative'])
+    parser.add_argument('-t', '--analysis-type', help='Type of analysis', default='all', choices=['all', 'quantitative', 'qualitative'])
     parser.add_argument('-o', '--file-output', help='Save analysis to output file')
     args = parser.parse_args()
 
     annotated = read_writings(args.annotated_file, args.mistake_type)
     predicted = read_writings(args.predicted_file, args.mistake_type)
-    show_comparison(annotated, predicted)
+    if args.analysis_type in ["all", "qualitative"]:
+        show_comparison(annotated, predicted)
 
