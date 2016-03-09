@@ -20,6 +20,9 @@ def read_writings(file_name, mistake_type):
 
 
 def flatten(writings):
+    """Flatten a dict of writings into a list of tuples. Notice that we are
+    ignoring correct key right now. This is deliberated: we still do not
+    support correction but only error flaging"""
     return {(key, change['start'], change['selection'], change['symbol']) for key, changes in writings.items() for change in changes}
 
 
