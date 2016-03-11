@@ -49,6 +49,18 @@ def check_spelling(original_text):
     return response
 
 
+def preceded_by_breakline(sentence, pos):
+    while pos > 0:
+        previous_pos = pos - 1
+        if sentence[previous_pos] == "\n":
+            return True
+        elif sentence[previous_pos] == " ":
+            pos = previous_pos
+        else:
+            return False
+    return False
+
+
 def check_capitalization(text):
     """
     Check if a text has spelling errors.
@@ -89,7 +101,7 @@ def check_capitalization(text):
                 must_be_capital = dictionary.is_capital_word(word)
                 if (word[0].isupper() and not must_be_capital):
                     if dictionary.is_english_word(word.lower()) and\
-                       sentence[relative_pos -1] != "\n":
+                       not preceded_by_breakline(sentence, relative_pos):
                         item = {
                             "selection": word,
                             "start": pos + relative_pos
