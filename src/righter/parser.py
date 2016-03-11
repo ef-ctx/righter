@@ -26,10 +26,11 @@ class StateController:
                     return False
         return True
 
-    def start_writing(self, writing_id):
+    def start_writing(self, writing_id, level):
         self.writing_failed = False
         self.writing = {
             "id": writing_id,
+            "level": level,
             "text": "",
             "changes": [],
         }
@@ -134,7 +135,7 @@ def parse(xml_file):
     for event, element in etree.iterparse(xml_file, events=('start', 'end')):
         if element.tag == 'writing':
             if event == 'start':
-                controller.start_writing(element.get('id'))
+                controller.start_writing(element.get('id'), element.get('level'))
             else:
                 controller.end_writing()
                 if not controller.writing_failed and controller.are_changes_correct():
