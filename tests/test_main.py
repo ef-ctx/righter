@@ -126,14 +126,13 @@ class SpellingTestCase(unittest.TestCase):
                 'selection': 'i',
                 'start': 0
             },
-            #{
-            #    'selection': 'china',
-            #    'start': 13
-            #},
+            {
+                'selection': 'china',
+                'start': 13
+            },
             {
                 'selection': 'i',
                 'start': 21
             }
         ]
-        import pdb; pdb.set_trace()
         self.assertEqual(response, expected_response)

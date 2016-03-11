@@ -80,6 +80,6 @@ def is_capital_word(text):
     is_first_person = text in ["i", "i'm", "i'll", "i've", "i'd"]
     is_weekday = text in ["monday", "tuesday", "wednesday", "thursday", "friday", "saturday", "sunday"]
     is_month = text in ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
-    is_language = text in LANGUAGES
+    is_language = text.title() in LANGUAGES
     is_country = text in ["china", "brazil", "usa"]
     return is_first_person or is_weekday or is_month or is_language or is_country

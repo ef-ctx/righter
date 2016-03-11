@@ -63,6 +63,7 @@ def check_capitalization(text):
     pos = 0
     for sentence in sentences:
         clean_sentence = sentence.strip()
+        clean_sentence = utils.remove_punctuation(clean_sentence)
         if not clean_sentence:
             continue
         # Check if first character is capital
@@ -80,6 +81,7 @@ def check_capitalization(text):
         words = clean_sentence.split()
         relative_sentence = sentence
         relative_pos = len(words[0]) - 1
+
         for word in words[1:]:
             relative_pos += relative_sentence.find(word)
             relative_sentence = sentence[relative_pos + len(word):]
