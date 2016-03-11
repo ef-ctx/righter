@@ -49,6 +49,18 @@ def check_spelling(original_text):
     return response
 
 
+def preceded_by_breakline(sentence, pos):
+    while pos > 0:
+        previous_pos = pos - 1
+        if sentence[previous_pos] == "\n":
+            return True
+        elif sentence[previous_pos] == " ":
+            pos = previous_pos
+        else:
+            return False
+    return False
+
+
 def check_capitalization(text):
     """
     Check if a text has spelling errors.
@@ -63,6 +75,7 @@ def check_capitalization(text):
     pos = 0
     for sentence in sentences:
         clean_sentence = sentence.strip()
+        clean_sentence = utils.remove_punctuation(clean_sentence, ignore="'")
         if not clean_sentence:
             continue
         # Check if first character is capital
@@ -78,23 +91,31 @@ def check_capitalization(text):
         # check if a common English word in the middle of the text is
         # wrongly capitalized
         words = clean_sentence.split()
-        for word in words[1:]:
-            must_be_capital = dictionary.is_capital_word(word)
-            if (word[0].isupper() and not must_be_capital):
-                if dictionary.is_english_word(word.lower()):
+        if words:
+            relative_sentence = sentence
+            relative_pos = sentence.find(words[0]) + len(words[0])
+            relative_sentence = sentence[relative_pos:]
+            for word in words[1:]:
+                relative_pos += relative_sentence.find(word)
+                relative_sentence = sentence[relative_pos + len(word):]
+                must_be_capital = dictionary.is_capital_word(word)
+                if (word[0].isupper() and not must_be_capital):
+                    if dictionary.is_english_word(word.lower()) and\
+                       not preceded_by_breakline(sentence, relative_pos):
+                        item = {
+                            "selection": word,
+                            "start": pos + relative_pos
+                        }
+                        response.append(item)
+                elif (word[0].islower() and must_be_capital):
                     item = {
                         "selection": word,
-                        "start": text.find(word)
+                        "start": pos + relative_pos
                     }
                     response.append(item)
-            elif (word[0].islower() and must_be_capital):
-                item = {
-                    "selection": word,
-                    "start": text.find(word)
-                }
-                response.append(item)
-                    
-        pos += len(sentence) + 1
+                relative_pos += (len(word))
+                        
+            pos += len(sentence) + 1
     return response
 
 

@@ -9,6 +9,12 @@ sample3 = '\n            \n            \n            \n            \n           
 
 sample4 = '\n            \n            \n            \n            \n            Hi Aunt Jane  How are you! welcome come to The USA!  first ,you can book the ticket throught ticket agent. when you arrive airport,you can take e-ticket by you ID.then check in  .next you need prepare you ID.thanks!  Wuhui\n            '
 
+
+sample5 = "On  wednesday"
+
+sample_C191561 = "\n            Hi:\n\nMy name is Yichen.I am 27 years old.I am from China.But i live in Taiyuan.I am a teacher.I like my job.\n\nYichen\n            """
+
+
 class SpellingTestCase(unittest.TestCase):
 
     maxDiff = None
@@ -97,3 +103,78 @@ class SpellingTestCase(unittest.TestCase):
             }
         ]
         self.assertEqual(response, expected_response)
+
+    def test_capitalization_sample5(self):
+        response = righter.check_capitalization(sample5)
+        expected_response = [
+            {
+                "selection": "wednesday",
+                "start": 4
+            }
+        ]
+        self.assertEqual(response, expected_response)
+
+    def test_capitalization_im(self):
+        sample = "Dear mum and dad, I'm in the USA"
+        response = righter.check_capitalization(sample)
+        expected_response = []
+        self.assertEqual(response, expected_response)
+
+    def test_capitalization_saturday(self):
+        sample = "On saturday, my friends visit me"
+        response = righter.check_capitalization(sample)
+        expected_response = [
+            {
+                'selection': 'saturday',
+                'start': 4
+            }
+        ]
+        self.assertEqual(response, expected_response)
+
+    def test_capitalization_position(self):
+        sample = "i working at china,  i am a fireman."
+        response = righter.check_capitalization(sample)
+        expected_response = [
+            {
+                'selection': 'i',
+                'start': 0
+            },
+            {
+                'selection': 'china',
+                'start': 13
+            },
+            {
+                'selection': 'i',
+                'start': 21
+            }
+        ]
+        self.assertEqual(response, expected_response)
+        
+    def test_capitalization_position2(self):
+        response = righter.check_capitalization(sample_C191561)
+        expected_response = [
+            {
+                "selection": "i",
+                "start": 74
+            }
+        ]
+        self.assertEqual(response, expected_response)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        

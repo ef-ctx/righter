@@ -15,11 +15,14 @@ def contains_digit(text):
     return False
 
 
-def remove_punctuation(text):
+def remove_punctuation(text, ignore=None):
     """
     Remove all punctiation from text
     """
-    for char in string.punctuation:
+    punctuation = string.punctuation
+    if ignore:
+        punctuation = punctuation.replace(ignore, "")
+    for char in punctuation:
         text = text.replace(char, ' ')
     return text
 
