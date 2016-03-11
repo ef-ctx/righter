@@ -75,7 +75,7 @@ def check_capitalization(text):
     pos = 0
     for sentence in sentences:
         clean_sentence = sentence.strip()
-        clean_sentence = utils.remove_punctuation(clean_sentence)
+        clean_sentence = utils.remove_punctuation(clean_sentence, ignore="'")
         if not clean_sentence:
             continue
         # Check if first character is capital
