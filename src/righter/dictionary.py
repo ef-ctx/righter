@@ -67,4 +67,7 @@ def is_english_word(text):
 
 
 def is_capital_word(text):
-    return text in ["I"]
+    is_first_person = text in ["I", "I'm", "I'll", "I've", "I'd"]
+    is_weekday = text in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+    is_month = text in ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
+    return is_first_person or is_weekday or is_month
