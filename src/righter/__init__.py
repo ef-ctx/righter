@@ -88,7 +88,8 @@ def check_capitalization(text):
                 relative_sentence = sentence[relative_pos + len(word):]
                 must_be_capital = dictionary.is_capital_word(word)
                 if (word[0].isupper() and not must_be_capital):
-                    if dictionary.is_english_word(word.lower()):
+                    if dictionary.is_english_word(word.lower()) and\
+                       sentence[relative_pos -1] != "\n":
                         item = {
                             "selection": word,
                             "start": pos + relative_pos
