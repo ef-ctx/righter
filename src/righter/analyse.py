@@ -92,6 +92,22 @@ def show_quantitative(annotated, predicted):
     print(table.table)
 
 
+def show_mismatches(annotated, predicted, precision=True):
+    annotated = flatten(map_id_to_field(annotated, "changes"))
+    predicted = flatten(map_id_to_field(predicted, "changes"))
+    if precision:
+        mismatched = predicted - annotated
+    else:
+        mismatched = annotated - predicted
+    count = collections.defaultdict(lambda: 0)
+    for ms in mismatched:
+        count[ms[2]] += 1
+    count = list(count.items())
+    count.sort(key=lambda x: x[1])
+    for k, v in count:
+        print(k, v)
+
+
 def flatten(writings):
     """Flatten a dict of writings into a list of tuples. Notice that we are
     ignoring correct key right now. This is deliberated: we still do not
