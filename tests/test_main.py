@@ -9,6 +9,10 @@ sample3 = '\n            \n            \n            \n            \n           
 
 sample4 = '\n            \n            \n            \n            \n            Hi Aunt Jane  How are you! welcome come to The USA!  first ,you can book the ticket throught ticket agent. when you arrive airport,you can take e-ticket by you ID.then check in  .next you need prepare you ID.thanks!  Wuhui\n            '
 
+
+sample5 = "On  wednesday"
+
+
 class SpellingTestCase(unittest.TestCase):
 
     maxDiff = None
@@ -94,6 +98,16 @@ class SpellingTestCase(unittest.TestCase):
             {
                 'start': 273,
                 'selection': 'thanks'
+            }
+        ]
+        self.assertEqual(response, expected_response)
+
+    def test_capitalization_sample5(self):
+        response = righter.check_capitalization(sample5)
+        expected_response = [
+            {
+                "selection": "wednesday",
+                "start": 4
             }
         ]
         self.assertEqual(response, expected_response)
