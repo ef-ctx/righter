@@ -10,6 +10,8 @@ LANGUAGES_PATH = "data/languages.txt"
 WORDS_FILEPATHS = [EN_GB_WORDS_PATH, EN_US_WORDS_PATH]
 #WORDS_FILEPATHS = ["/usr/share/dict/words"]
 
+NAME_PATH = "data/names.txt"
+
 ABBREV_PATH = "data/abbreviations.txt"
 
 
@@ -50,9 +52,26 @@ def _build_abbreviations_list():
     return all_abbrevs
 
 
+def _build_names_list():
+    """
+    Builds a set of names
+    """
+    all_names = set()
+    with open(NAME_PATH) as name_file:
+        for line in name_file.readlines():
+            all_names.add(line.strip().lower())
+    return all_names
+
+
 WORDS = _build_word_list()
 ABBREVIATIONS = _build_abbreviations_list()
 LANGUAGES = _build_languages_list()
+NAMES = _build_names_list()
+
+
+def is_name(text):
+    return text.strip() in NAMES
+
 
 def is_english_abbreviation(text):
     """
