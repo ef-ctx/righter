@@ -52,10 +52,12 @@ def show_qualitative(baseline, predicted):
     baseline_dict = map_id_to_field(baseline, "changes")
     predicted_dict = map_id_to_field(predicted, "changes")
     writings_dict = map_id_to_field(baseline, "text")
+    level_pred_dict = map_id_to_field(predicted, "level")
+    level_base_dict = map_id_to_field(predicted, "level")
 
     total_items = 0
-    precision_list = []
-    recall_list = []
+    precisions = collections.defaultdict(lambda: [])
+    recalls = collections.defaultdict(lambda: [])
     for id_, text in writings_dict.items():
         text = format_text(text)
         baseline = format_changes(baseline_dict[id_])
@@ -66,8 +68,9 @@ def show_qualitative(baseline, predicted):
         rec = "{}".format(recall(base, prediction))
         row = [id_, text, baseline, predicted, prec, rec]
         data.append(row)
-        precision_list.append(float(prec))
-        recall_list.append(float(rec))
+        level = int(level_pred_dict.get(id_, level_base_dict.get(id_, 0)))
+        precisions[level].append(float(prec))
+        recalls[level].append(float(rec))
         total_items += 1
     data = sorted(data, key=lambda row: float(row[-2]), reverse=True)
     headers = ["id", "text", "baseline", "predicted", "precision", "recall"]
@@ -76,8 +79,9 @@ def show_qualitative(baseline, predicted):
     table.inner_row_border = True
     print(table.table)
     print("total items: ", total_items)
-    print("average precision: {} (std: {})".format(mean(precision_list), stdev(precision_list)))
-    print("average recall: {} (std: {})".format(mean(recall_list), stdev(recall_list)))
+    print("level,precision,recall")
+    for level in sorted(precisions.keys()):
+        print("{},{},{}".format(level, mean(precisions[level]), mean(recalls[level])))
 
 
 def show_quantitative(annotated, predicted):
