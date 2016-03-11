@@ -36,6 +36,9 @@ class StateController:
         }
         self.inside_writing = True
 
+    def set_nationality(self, nationality):
+        self.writing['nationality'] = nationality
+
     def end_writing(self):
         self.inside_writing = False
 
@@ -142,6 +145,9 @@ def parse(xml_file):
                     yield controller.writing
                 # keep etree from keeping the entire tree in memory
                 element.clear()
+        elif element.tag == 'learner' and event == 'end':
+            if element.get('nationality'):
+                controller.set_nationality(element.get('nationality'))
         elif element.tag == 'text' and event == 'end':
             try:
                 _parse_text(controller, '<text>{}</text>'.format(element.text))
