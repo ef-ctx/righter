@@ -79,7 +79,7 @@ def check_capitalization(text):
             # wrongly capitalized
             words = clean_sentence.split()
             for word in words[1:]:
-                if word[0].isupper():
+                if word[0].isupper() and not dictionary.is_capital_word(word):
                     if dictionary.is_english_word(word.lower()):
                         item = {
                             "selection": word,

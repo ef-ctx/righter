@@ -7,6 +7,7 @@ from righter import utils
 EN_GB_WORDS_PATH = "data/british-english-insane.txt"
 EN_US_WORDS_PATH = "data/american-english-insane.txt"
 WORDS_FILEPATHS = [EN_GB_WORDS_PATH, EN_US_WORDS_PATH]
+#WORDS_FILEPATHS = ["/usr/share/dict/words"]
 
 ABBREV_PATH = "data/abbreviations.txt"
 
@@ -63,3 +64,7 @@ def is_english_word(text):
     Return True if given string is a valid English word.
     """
     return is_english_abbreviation(text) or (text in WORDS) or is_contraction(text)
+
+
+def is_capital_word(text):
+    return text in ["I"]
