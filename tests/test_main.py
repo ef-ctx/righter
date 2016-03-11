@@ -111,3 +111,29 @@ class SpellingTestCase(unittest.TestCase):
             }
         ]
         self.assertEqual(response, expected_response)
+
+    def test_capitalization_im(self):
+        sample = "Dear mum and dad, I'm in the USA"
+        response = righter.check_capitalization(sample)
+        expected_response = []
+        self.assertEqual(response, expected_response)
+
+    def test_capitalization_position(self):
+        sample = "i working at china,  i am a fireman."
+        response = righter.check_capitalization(sample)
+        expected_response = [
+            {
+                'selection': 'i',
+                'start': 0
+            },
+            #{
+            #    'selection': 'china',
+            #    'start': 13
+            #},
+            {
+                'selection': 'i',
+                'start': 21
+            }
+        ]
+        import pdb; pdb.set_trace()
+        self.assertEqual(response, expected_response)
