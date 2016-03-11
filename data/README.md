@@ -14,6 +14,13 @@ http://www.aresearchguide.com/comabb.html
 
 http://www.acronymfinder.com/
 
+## Languages
+
+Extracted from:
+https://en.wikipedia.org/wiki/List_of_languages_by_number_of_native_speakers
+
+Can be improved! :)
+
 ## List of names
 
 In order to extract a list of names from our annotated base I did the following
