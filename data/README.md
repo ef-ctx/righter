@@ -64,7 +64,7 @@ index ddcac8a..66c4448 100644
 +    keys = list(predicted.keys())
 +    random.shuffle(keys)
 +    count = collections.defaultdict(lambda: 0)
-+    for key in keys[:130000]:
++    for key in keys[:200000]:
 +        selections = set()
 +        for change in annotated.get(key, []):
 +            selections.add(change['selection'])
@@ -75,7 +75,7 @@ index ddcac8a..66c4448 100644
 +    items = list(count.items())
 +    items.sort(key=lambda x: x[1])
 +    for key, c in items:
-+        if c >= 3:
++        if c >= 8:
 +            print(key)
 +
 +    #if args.analysis_type in ["all", "qualitative"]:
