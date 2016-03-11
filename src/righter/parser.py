@@ -80,7 +80,8 @@ def _parse_text(controller, blob):
                 controller.start_change()
             else:
                 controller.end_change()
-                controller.update_text(element.tail)
+                if element.tail:
+                    controller.update_text(' {}'.format(element.tail))
         elif element.tag == 'selection' and event == 'end':
             controller.set_selection(element.text)
         elif element.tag == 'symbol' and event == 'end':
@@ -93,7 +94,8 @@ def _parse_text(controller, blob):
             else:
                 controller.update_text('\n')
         elif not controller.inside_change and event == 'end':
-            controller.update_text(element.tail)
+            if element.tail:
+                controller.update_text(' {}'.format(element.tail))
 
 
 def parse(xml_file):
