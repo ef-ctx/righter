@@ -79,29 +79,30 @@ def check_capitalization(text):
         # check if a common English word in the middle of the text is
         # wrongly capitalized
         words = clean_sentence.split()
-        relative_sentence = sentence
-        relative_pos = len(words[0]) - 1
-
-        for word in words[1:]:
-            relative_pos += relative_sentence.find(word)
-            relative_sentence = sentence[relative_pos + len(word):]
-            must_be_capital = dictionary.is_capital_word(word)
-            if (word[0].isupper() and not must_be_capital):
-                if dictionary.is_english_word(word.lower()):
+        if words:
+            relative_sentence = sentence
+            relative_pos = sentence.find(words[0]) + len(words[0])
+            relative_sentence = sentence[relative_pos:]
+            for word in words[1:]:
+                relative_pos += relative_sentence.find(word)
+                relative_sentence = sentence[relative_pos + len(word):]
+                must_be_capital = dictionary.is_capital_word(word)
+                if (word[0].isupper() and not must_be_capital):
+                    if dictionary.is_english_word(word.lower()):
+                        item = {
+                            "selection": word,
+                            "start": pos + relative_pos
+                        }
+                        response.append(item)
+                elif (word[0].islower() and must_be_capital):
                     item = {
                         "selection": word,
                         "start": pos + relative_pos
                     }
                     response.append(item)
-            elif (word[0].islower() and must_be_capital):
-                item = {
-                    "selection": word,
-                    "start": pos + relative_pos
-                }
-                response.append(item)
-            relative_pos += (len(word))
-                    
-        pos += len(sentence) + 1
+                relative_pos += (len(word))
+                        
+            pos += len(sentence) + 1
     return response
 
 

@@ -12,6 +12,8 @@ sample4 = '\n            \n            \n            \n            \n           
 
 sample5 = "On  wednesday"
 
+sample_C191561 = "\n            Hi:\n\nMy name is Yichen.I am 27 years old.I am from China.But i live in Taiyuan.I am a teacher.I like my job.\n\nYichen\n            """
+
 
 class SpellingTestCase(unittest.TestCase):
 
@@ -118,6 +120,17 @@ class SpellingTestCase(unittest.TestCase):
         expected_response = []
         self.assertEqual(response, expected_response)
 
+    def test_capitalization_saturday(self):
+        sample = "On saturday, my friends visit me"
+        response = righter.check_capitalization(sample)
+        expected_response = [
+            {
+                'selection': 'saturday',
+                'start': 4
+            }
+        ]
+        self.assertEqual(response, expected_response)
+
     def test_capitalization_position(self):
         sample = "i working at china,  i am a fireman."
         response = righter.check_capitalization(sample)
@@ -136,3 +149,32 @@ class SpellingTestCase(unittest.TestCase):
             }
         ]
         self.assertEqual(response, expected_response)
+        
+    def test_capitalization_position2(self):
+        response = righter.check_capitalization(sample_C191561)
+        expected_response = [
+            {
+                "selection": "i",
+                "start": 74
+            }
+        ]
+        self.assertEqual(response, expected_response)
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
+        
