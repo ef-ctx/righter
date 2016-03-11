@@ -4,8 +4,10 @@ English words & other dictionary-based.
 from righter import utils
 
 
-EN_GB_WORDS_PATH = "data/british-english-insane.txt"
-EN_US_WORDS_PATH = "data/american-english-insane.txt"
+#EN_GB_WORDS_PATH = "data/british-english-insane.txt"
+#EN_US_WORDS_PATH = "data/american-english-insane.txt"
+EN_GB_WORDS_PATH = "data/british-english-huge.txt"
+EN_US_WORDS_PATH = "data/american-english-huge.txt"
 LANGUAGES_PATH = "data/languages.txt"
 WORDS_FILEPATHS = [EN_GB_WORDS_PATH, EN_US_WORDS_PATH]
 #WORDS_FILEPATHS = ["/usr/share/dict/words"]
