@@ -31,13 +31,13 @@ def check_spelling(original_text):
             "start": <position-of-the-first-character-in-string>
         }
     """
-    text = original_text.replace("’", "'")
+    text = utils.asciify(original_text)
     text = utils.remove_punctuation(text)
     words = text.split()
     response = []
     for word in words:
-        if not dictionary.is_english_word(word.lower()) and\
-           not utils.contains_digit(word.lower()) and\
+        if not dictionary.is_english_word(word.lower(), lower=True) and\
+           not utils.contains_digit(word) and\
            not dictionary.is_name(word):
             for pos in findall(word, text):
                 item = {

@@ -59,18 +59,19 @@ def _build_names_list():
     all_names = set()
     with open(NAME_PATH) as name_file:
         for line in name_file.readlines():
-            all_names.add(line.strip().lower())
+            all_names.add(utils.asciify(line.strip()))
     return all_names
 
 
 WORDS = _build_word_list()
+WORDS_LOWER = {word.lower() for word in WORDS}
 ABBREVIATIONS = _build_abbreviations_list()
 LANGUAGES = _build_languages_list()
 NAMES = _build_names_list()
 
 
 def is_name(text):
-    return text.strip() in NAMES
+    return utils.asciify(text.strip()) in NAMES
 
 
 def is_english_abbreviation(text):
@@ -87,11 +88,15 @@ def is_contraction(text):
     return text in ["ll", "ve"]
     
 
-def is_english_word(text):
+def is_english_word(text, lower=False):
     """
     Return True if given string is a valid English word.
     """
-    return is_english_abbreviation(text) or (text in WORDS) or is_contraction(text)
+    if lower:
+        words = WORDS_LOWER
+    else:
+        words = WORDS
+    return is_english_abbreviation(text) or (text in words) or is_contraction(text)
 
 
 def is_capital_word(text):

@@ -2,6 +2,7 @@
 Utilities for text analysis and parsing.
 """
 import string
+import unicodedata
 
 
 def contains_digit(text):
@@ -21,3 +22,7 @@ def remove_punctuation(text):
     for char in string.punctuation:
         text = text.replace(char, ' ')
     return text
+
+
+def asciify(s):
+   return ''.join(c for c in unicodedata.normalize('NFD', s) if unicodedata.category(c) != 'Mn').encode('ascii', 'ignore').decode('ascii')

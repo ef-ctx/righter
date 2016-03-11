@@ -1,4 +1,6 @@
 import argparse
+import righter
+import collections
 import json
 from statistics import mean, stdev
 import textwrap
