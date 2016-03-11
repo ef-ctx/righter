@@ -74,18 +74,26 @@ def check_capitalization(text):
                 "start": first_word_position
             }
             response.append(item)
-        else:
-            # check if a common English word in the middle of the text is
-            # wrongly capitalized
-            words = clean_sentence.split()
-            for word in words[1:]:
-                if word[0].isupper() and not dictionary.is_capital_word(word):
-                    if dictionary.is_english_word(word.lower()):
-                        item = {
-                            "selection": word,
-                            "start": text.find(word)
-                        }
-                        response.append(item)
+
+        # check if a common English word in the middle of the text is
+        # wrongly capitalized
+        words = clean_sentence.split()
+        for word in words[1:]:
+            must_be_capital = dictionary.is_capital_word(word)
+            if (word[0].isupper() and not must_be_capital):
+                if dictionary.is_english_word(word.lower()):
+                    item = {
+                        "selection": word,
+                        "start": text.find(word)
+                    }
+                    response.append(item)
+            elif (word[0].islower() and must_be_capital):
+                item = {
+                    "selection": word,
+                    "start": text.find(word)
+                }
+                response.append(item)
+                    
         pos += len(sentence) + 1
     return response
 

@@ -6,6 +6,7 @@ from righter import utils
 
 EN_GB_WORDS_PATH = "data/british-english-insane.txt"
 EN_US_WORDS_PATH = "data/american-english-insane.txt"
+LANGUAGES_PATH = "data/languages.txt"
 WORDS_FILEPATHS = [EN_GB_WORDS_PATH, EN_US_WORDS_PATH]
 #WORDS_FILEPATHS = ["/usr/share/dict/words"]
 
@@ -21,6 +22,14 @@ def _build_word_list():
         with open(filepath) as words_file:
             some_words = [word.strip() for word in words_file.readlines()]
             all_words |= set(some_words)
+    return all_words
+
+
+def _build_languages_list():
+    all_words = set()
+    with open(LANGUAGES_PATH) as words_file:
+        some_words = [word.strip() for word in words_file.readlines()]
+        all_words |= set(some_words)
     return all_words
 
 
@@ -43,7 +52,7 @@ def _build_abbreviations_list():
 
 WORDS = _build_word_list()
 ABBREVIATIONS = _build_abbreviations_list()
-
+LANGUAGES = _build_languages_list()
 
 def is_english_abbreviation(text):
     """
@@ -70,4 +79,5 @@ def is_capital_word(text):
     is_first_person = text in ["I", "I'm", "I'll", "I've", "I'd"]
     is_weekday = text in ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
     is_month = text in ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"]
-    return is_first_person or is_weekday or is_month
+    is_language = text in LANGUAGES
+    return is_first_person or is_weekday or is_month or is_language
