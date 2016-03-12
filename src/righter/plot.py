@@ -53,26 +53,26 @@ if __name__ == '__main__':
         'AR': 0,
         'C': 0,
         'SP': 0,
-        #'x>>y': 0,
-        #'AG': 0,
-        #'CO': 0,
-        #'D': 0,
-        #'EX': 0,
-        #'HL': 0,
-        #'I(x)': 0,
-        #'MW': 0,
-        #'NS': 0,
-        #'NWS': 0,
-        #'PH': 0,
-        #'PL': 0,
-        #'PO': 0,
-        #'PR': 0,
-        #'PS': 0,
-        #'PU': 0,
-        #'SI': 0,
-        #'VT': 0,
-        #'WC': 0,
-        #'WO': 0,
+        'x>>y': 0,
+        'AG': 0,
+        'CO': 0,
+        'D': 0,
+        'EX': 0,
+        'HL': 0,
+        'I(x)': 0,
+        'MW': 0,
+        'NS': 0,
+        'NWS': 0,
+        'PH': 0,
+        'PL': 0,
+        'PO': 0,
+        'PR': 0,
+        'PS': 0,
+        'PU': 0,
+        'SI': 0,
+        'VT': 0,
+        'WC': 0,
+        'WO': 0,
     }
     words = get_words_per_level(writings)
     for mistake in mistakes:
@@ -84,9 +84,9 @@ if __name__ == '__main__':
         mistakes_per_level = get_mistakes_per_level(writings, mistake)
         plot(mistakes_per_level, words, mistake)
 
-    plt.ylabel("Mistakes / words")
+    plt.ylabel("Errors / words")
     plt.xlabel("Level")
-    plt.title("Level X Mistakes / words")
+    plt.title("Level X Errors / words")
     plt.xticks(range(1, 16))
     plt.axis(xmin=1, xmax=15)
     plt.legend()

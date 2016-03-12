@@ -53,7 +53,7 @@ def show_qualitative(baseline, predicted):
     predicted_dict = map_id_to_field(predicted, "changes")
     writings_dict = map_id_to_field(baseline, "text")
     level_pred_dict = map_id_to_field(predicted, "level")
-    level_base_dict = map_id_to_field(predicted, "level")
+    level_base_dict = map_id_to_field(baseline, "level")
 
     total_items = 0
     precisions = collections.defaultdict(lambda: [])
