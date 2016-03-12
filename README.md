@@ -31,14 +31,19 @@ further processed.
 
 ## How to use
 
-After having fixed the XML, this is an example
+After having fixed the XML, it is possible to export it to a list of JSONs:
 
 ```
-    python righter/parser.py ../data/EF20130315_selection299.xml ../data/299.txt
-    python righter/analyse.py -i ../data/299.txt -p ../data/299-predictions.txt  --mistake-type SP
+    PYTHONPATH=src python -m righter.parser data/EF20130315_selection299.xml data/299.txt
 ```
 
-Generate a prediction
+This is an example of implementation to identify English mistakes (feel free to implement your own :)):
 ```
-    PYTHONPATH='src':$PYTHONPATH python -m righter.predict -i data/299.txt -o data/299-predictions.txt
+    PYTHONPATH=src:$PYTHONPATH python -m righter.predict -i data/299.txt -o data/299-predictions.txt
 ```
+
+In order to see its precision and recall, it is possible to use:
+```
+    PYTHONPATH=src:$PYTHONPATH python -m righter.analyse -i data/299.txt -p data/299.txt  --mistake-type C
+```
+
