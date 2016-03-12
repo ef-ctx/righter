@@ -70,6 +70,7 @@ WORDS_LOWER = {word.lower() for word in WORDS}
 ABBREVIATIONS = _build_abbreviations_list()
 LANGUAGES = _build_languages_list()
 NAMES = _build_names_list()
+NAMES_LOWER = {name.lower() for name in NAMES}
 
 
 def is_name(text):
@@ -108,4 +109,5 @@ def is_capital_word(text):
     is_month = text in ["january", "february", "march", "april", "may", "june", "july", "august", "september", "october", "november", "december"]
     is_language = text.title() in LANGUAGES
     is_country = text in ["china", "brazil", "usa"]
-    return is_first_person or is_weekday or is_month or is_language or is_country
+    is_name = text in NAMES_LOWER
+    return is_first_person or is_weekday or is_month or is_language or is_country or is_name

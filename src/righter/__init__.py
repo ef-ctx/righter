@@ -71,7 +71,7 @@ def check_capitalization(text):
         }
     """
     response = []
-    sentences = re.split('[!?.]', text)  # TODO: add \n
+    sentences = re.split('[!?.]+', text)  # TODO: add \n
     pos = 0
     for sentence in sentences:
         clean_sentence = sentence.strip()
@@ -99,7 +99,7 @@ def check_capitalization(text):
                 relative_pos += relative_sentence.find(word)
                 relative_sentence = sentence[relative_pos + len(word):]
                 must_be_capital = dictionary.is_capital_word(word)
-                if (word[0].isupper() and not must_be_capital):
+                if (word == word.capitalize() and not must_be_capital):
                     if dictionary.is_english_word(word.lower()) and\
                        not preceded_by_breakline(sentence, relative_pos):
                         item = {
@@ -107,7 +107,7 @@ def check_capitalization(text):
                             "start": pos + relative_pos
                         }
                         response.append(item)
-                elif (word[0].islower() and must_be_capital):
+                elif (word != word.capitalize() and must_be_capital):
                     item = {
                         "selection": word,
                         "start": pos + relative_pos
