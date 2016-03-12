@@ -55,9 +55,14 @@ def show_qualitative(baseline, predicted):
     level_pred_dict = map_id_to_field(predicted, "level")
     level_base_dict = map_id_to_field(baseline, "level")
 
+    nat_pred_dict = map_id_to_field(predicted, "nationality")
+    nat_base_dict = map_id_to_field(baseline, "nationality")
+
     total_items = 0
     precisions = collections.defaultdict(lambda: [])
     recalls = collections.defaultdict(lambda: [])
+    precisions_per_nat = collections.defaultdict(lambda: [])
+    recalls_per_nat = collections.defaultdict(lambda: [])
     precision_list = []
     recall_list = []
     for id_, text in writings_dict.items():
@@ -75,6 +80,9 @@ def show_qualitative(baseline, predicted):
         level = int(level_pred_dict.get(id_, level_base_dict.get(id_, 0)))
         precisions[level].append(float(prec))
         recalls[level].append(float(rec))
+        nat = nat_pred_dict.get(id_, nat_base_dict.get(id_, ''))
+        precisions_per_nat[nat].append(float(prec))
+        recalls_per_nat[nat].append(float(rec))
         total_items += 1
     data = sorted(data, key=lambda row: float(row[-2]), reverse=True)
     headers = ["id", "text", "baseline", "predicted", "precision", "recall"]
@@ -88,6 +96,18 @@ def show_qualitative(baseline, predicted):
     print("level,precision,recall")
     for level in sorted(precisions.keys()):
         print("{},{},{}".format(level, mean(precisions[level]), mean(recalls[level])))
+
+    nats = []
+    for nat in precisions_per_nat.keys():
+        if len(precisions_per_nat[nat]) > 100:
+            prec = mean(precisions_per_nat[nat])
+            rec = mean(recalls_per_nat[nat])
+            f1 = 2 * ((prec * rec) / (prec + rec))
+            nats.append((f1, nat))
+
+    print("nat,f1")
+    for f1, nat in sorted(nats, reverse=True):
+        print("{},{}".format(nat, f1))
 
 
 def show_quantitative(annotated, predicted):
