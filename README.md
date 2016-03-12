@@ -47,3 +47,11 @@ In order to see its precision and recall, it is possible to use:
     PYTHONPATH=src:$PYTHONPATH python -m righter.analyse -i data/299.txt -p data/299.txt  --mistake-type C
 ```
 
+In order to generate plots on annotated data
+
+```
+    PYTHONPATH=src python -m righter.plot -i 299.txt
+```
+
+Notice that matplotlib must be installed for this to run. By default it will
+generate a graph with the top 10 most common errors
