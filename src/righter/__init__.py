@@ -121,9 +121,11 @@ def check_capitalization(text):
 
 def check_article(text):
     mistakes_list = []
-    a_before_vowel = r"(\b[aA]\b) [aeiouAEIOU][a-zA-Z]+"
-    mistake = re.search(a_before_vowel, text)
-    if mistake:
+    a_before_vowel = r"(\b[aA]\b) *[aeiouAEIOU][a-zA-Z]+"
+
+    pattern = re.compile(a_before_vowel)
+    for mistake in pattern.finditer(text):
+    
         pos = mistake.start()
         word = text[pos:].split()[0]
         item = {
@@ -132,9 +134,9 @@ def check_article(text):
         }
         mistakes_list.append(item)
 
-    an_before_consonant = r"(\b[aA]n\b) [bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ][a-zA-Z]+"   
-    mistake = re.search(an_before_consonant, text)
-    if mistake:
+    an_before_consonant = r"(\b[aA]n\b) *[bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ][a-zA-Z]+"   
+    pattern = re.compile(an_before_consonant)
+    for mistake in pattern.finditer(text):
         pos = mistake.start()
         word = text[pos:].split()[0]
         item = {

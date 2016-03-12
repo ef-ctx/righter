@@ -192,3 +192,33 @@ class SpellingTestCase(unittest.TestCase):
             }
         ]
         self.assertEqual(response, expected_response) 
+        
+    def test_article_two_spaces(self):
+        sample = '. An  model of my workmates and proud of my parents and leader.\n' 
+        response = righter.check_article(sample)
+        expected_response = [
+            {
+                'selection': 'An',
+                'start': 2
+            }
+        ]
+        self.assertEqual(response, expected_response) 
+
+    def test_article_problem(self): 
+        sample =  "\n            Career Plan                Name : Cindy\nFirst, I will do my best to play an outstanidng  roll  on  my recent job. To do an suitalbe  JE accountand  and study  more knowledge abount  our financia  system.       \nNext, I will study AP and AR accountant work to develop my accountant experience.\nAnother thing, I should study the economic law (my weakness) and pass the examination, at last get the accountant title certificate.\nThe fouth  stage, I hope I could improve my management ability and could do some   manage   job.\nFinally, I will do an  financial manager or controller. An  model of my workmates and proud of my parents and leader.\n            "
+        response = righter.check_article(sample)
+        expected_response = [
+            {
+                'selection': 'an',
+                'start': 133
+            },
+            {
+                "selection": "an",
+                "start": 555
+            },
+            {
+                "selection": "An",
+                "start": 592
+            }
+        ]
+        self.assertEqual(response, expected_response) 
