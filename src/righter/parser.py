@@ -55,7 +55,7 @@ class StateController:
 
     def set_selection(self, selection):
         if selection:
-            self.change["selection"] = selection.strip()
+            self.change["selection"] = selection
 
     def set_symbol(self, symbol):
         self.change["symbol"] = symbol
