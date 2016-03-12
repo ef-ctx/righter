@@ -36,7 +36,7 @@ def map_id_to_field(writings, field):
 def format_changes(original_changes):
     changes = []
     for i in original_changes:
-        xubi = "{} ({})".format(i["selection"], i["start"])
+        xubi = "{} ({})".format(i.get("selection", ""), i["start"])
         changes.append(xubi)
     return "\n".join(changes)
 
@@ -122,11 +122,11 @@ def flatten(writings):
     """Flatten a dict of writings into a list of tuples. Notice that we are
     ignoring correct key right now. This is deliberated: we still do not
     support correction but only error flaging"""
-    return {(key, change['start'], change['selection'].strip(), change['symbol'].strip()) for key, changes in writings.items() for change in changes}
+    return {(key, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for key, changes in writings.items() for change in changes}
 
 
 def flatten2(id_, changes):
-    return {(id_, change['start'], change['selection'].strip(), change['symbol'].strip()) for change in changes}
+    return {(id_, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for change in changes}
 
 
 def precision(annotations, predictions):
