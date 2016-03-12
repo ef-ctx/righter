@@ -58,6 +58,8 @@ def show_qualitative(baseline, predicted):
     total_items = 0
     precisions = collections.defaultdict(lambda: [])
     recalls = collections.defaultdict(lambda: [])
+    precision_list = []
+    recall_list = []
     for id_, text in writings_dict.items():
         text = format_text(text)
         baseline = format_changes(baseline_dict[id_])
@@ -68,6 +70,8 @@ def show_qualitative(baseline, predicted):
         rec = "{}".format(recall(base, prediction))
         row = [id_, text, baseline, predicted, prec, rec]
         data.append(row)
+        precision_list.append(float(prec))
+        recall_list.append(float(rec))
         level = int(level_pred_dict.get(id_, level_base_dict.get(id_, 0)))
         precisions[level].append(float(prec))
         recalls[level].append(float(rec))
@@ -79,6 +83,8 @@ def show_qualitative(baseline, predicted):
     table.inner_row_border = True
     print(table.table)
     print("total items: ", total_items)
+    print("average precision: {} (std: {})".format(mean(precision_list), stdev(precision_list)))
+    print("average recall: {} (std: {})".format(mean(recall_list), stdev(recall_list)))
     print("level,precision,recall")
     for level in sorted(precisions.keys()):
         print("{},{},{}".format(level, mean(precisions[level]), mean(recalls[level])))
