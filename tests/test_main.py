@@ -160,21 +160,35 @@ class SpellingTestCase(unittest.TestCase):
         ]
         self.assertEqual(response, expected_response)
         
+    def test_article_sample_a_old(self):
+        sample = "A old  sister"
+        response = righter.check_article(sample)
+        expected_response = [
+            {
+                "selection": "A",
+                "start": 0
+            }
+        ]
+        self.assertEqual(response, expected_response) 
         
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
-        
+    def test_article_sample_an_doctor(self):
+        sample = "I'm an doctor"
+        response = righter.check_article(sample)
+        expected_response = [
+            {
+                "selection": "an",
+                "start": 4
+            }
+        ]
+        self.assertEqual(response, expected_response) 
+
+    def test_article_sample_a_idea(self):
+        sample = "She has a idea"
+        response = righter.check_article(sample)
+        expected_response = [
+            {
+                "selection": "a",
+                "start": 8
+            }
+        ]
+        self.assertEqual(response, expected_response) 

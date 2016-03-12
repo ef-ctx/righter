@@ -119,6 +119,32 @@ def check_capitalization(text):
     return response
 
 
+def check_article(text):
+    mistakes_list = []
+    a_before_vowel = r"(\b[aA]\b) [aeiouAEIOU][a-zA-Z]+"
+    mistake = re.search(a_before_vowel, text)
+    if mistake:
+        pos = mistake.start()
+        word = text[pos:].split()[0]
+        item = {
+            "selection": word,
+            "start": pos
+        }
+        mistakes_list.append(item)
+
+    an_before_consonant = r"(\b[aA]n\b) [bcdfghjklmnpqrstvwxzBCDFGHJKLMNPQRSTVWXZ][a-zA-Z]+"   
+    mistake = re.search(an_before_consonant, text)
+    if mistake:
+        pos = mistake.start()
+        word = text[pos:].split()[0]
+        item = {
+            "selection": word,
+            "start": pos
+        }
+        mistakes_list.append(item)
+    return mistakes_list
+
+
 def check(text):
     changes = []
 
@@ -128,6 +154,10 @@ def check(text):
 
     for change in check_spelling(text):
         change['symbol'] = 'SP'
+        changes.append(change)
+
+    for change in check_article(text):
+        change['symbol'] = 'AR'
         changes.append(change)
 
     return changes
