@@ -1,11 +1,13 @@
-import requests
 import re
+import requests_cache
 from urllib.parse import quote_plus
 
 TYPE_MAP = {
     3: 'AR',
     1: 'SP',
 }
+
+session = requests_cache.CachedSession('ginger')
 
 
 class SentenceTooBigError(Exception):
@@ -89,7 +91,7 @@ def check(text):
     changes = []
     for sentence in merge_sentences(split_sentences(text)):
         params["text"] = sentence
-        resp = requests.get(url, params=params)
+        resp = session.get(url, params=params)
         resp.raise_for_status()
         response = resp.json()
         for correction in response["Corrections"]:
