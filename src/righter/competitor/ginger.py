@@ -2,11 +2,14 @@ import requests
 import re
 from urllib.parse import quote_plus
 
-
 TYPE_MAP = {
     3: 'AR',
     1: 'SP',
 }
+
+
+class SentenceTooBigError(Exception):
+    pass
 
 
 def split_sentences(text):
@@ -27,6 +30,24 @@ def split_sentences(text):
     for sentence, punct in zip(tokens[::2], tokens[1::2]):
         sentences.append(sentence + punct)
     return sentences
+
+
+def merge_sentences(sentences, max_size=600):
+    """Merges phrases together up to max_size. If a sentence is too big
+    SentenceTooBigError is raised"""
+    result = []
+    current = ''
+    for sent in sentences:
+        if len(sent) > max_size:
+            raise SentenceTooBigError()
+        new_sent = current + sent
+        if len(new_sent) > max_size:
+            result.append(current)
+            current = sent
+        else:
+            current += sent
+    result.append(current)
+    return result
 
 
 def _get_type(correction, text):
@@ -66,7 +87,7 @@ def check(text):
         "_": "1460102265093"
     }
     changes = []
-    for sentence in split_sentences(text):
+    for sentence in merge_sentences(split_sentences(text)):
         params["text"] = sentence
         resp = requests.get(url, params=params)
         resp.raise_for_status()

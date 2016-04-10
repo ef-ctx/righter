@@ -1,26 +1,6 @@
 import unittest
 from righter.competitor import ginger
 
-class SplitSentencesTestCase(unittest.TestCase):
-
-    def test_split_simple(self):
-        sentences = [
-            "I have an elephant.",
-            " What a beautiful elephant!",
-            " Wait, is it a flying elephant?",
-            " Sure is.",
-        ]
-        self.assertEqual(ginger.split_sentences("".join(sentences)), sentences)
-
-    def test_split_multiple_punctuation(self):
-        sentences = [
-            "I have an elephant.",
-            " What a beautiful elephant!",
-            " Wait, is it a flying elephant?!",
-            " Sure is...",
-        ]
-        self.assertEqual(ginger.split_sentences("".join(sentences)), sentences)
-
 class GingerCheckTestCase(unittest.TestCase):
 
     def test_check_article(self):
@@ -89,5 +69,35 @@ class GingerCheckTestCase(unittest.TestCase):
         all work and no play makes Jack a dull boy
         all work and no play makes Jack dull boy.
         all work and no play makes Jack a dull boy
+        """.split())
+        self.assertEqual(ginger.check(text), expected)
+
+    def test_big_text(self):
+        expected = [
+            {
+                'correction': 'All',
+                "originalSymbol": 1,
+                'selection': 'all',
+                'start': 616,
+                "suggestions": ["All"],
+                'symbol': 'C'
+            }
+        ]
+        text = " ".join("""
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy?
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy!
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        All work and no play makes Jack a dull boy.
+        all work and no play makes Jack a dull boy.
         """.split())
         self.assertEqual(ginger.check(text), expected)
