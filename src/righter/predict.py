@@ -1,9 +1,7 @@
 import json
 import argparse
 
-import righter
 from righter.log import logger
-from righter.competitor import ginger
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -12,9 +10,11 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--algorithm', help='Name of the algorithm to use')
     args = parser.parse_args()
 
-    if args.algorithm is None:
+    if args.algorithm is None or args.algorithm == 'righter':
+        import righter
         check = righter.check
     elif args.algorithm == 'ginger':
+        from righter.competitor import ginger
         check = ginger.check
 
     with open(args.input_file, 'r') as input_fp:
