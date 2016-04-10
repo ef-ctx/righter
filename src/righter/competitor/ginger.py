@@ -1,5 +1,6 @@
 import re
 import requests_cache
+from righter import settings
 from urllib.parse import quote_plus
 
 TYPE_MAP = {
@@ -7,7 +8,7 @@ TYPE_MAP = {
     1: 'SP',
 }
 
-session = requests_cache.CachedSession('ginger')
+session = requests_cache.CachedSession('ginger', backend=settings.REQUESTS_CACHE_BACKEND)
 
 
 class SentenceTooBigError(Exception):
