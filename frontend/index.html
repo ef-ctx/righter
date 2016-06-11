@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head><title>Righter</title></head>
+<body>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
+  <link rel="stylesheet" href="style.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+  <script src="app.js"></script>
+  <nav class="navbar navbar-inverse navbar-fixed-top">
+    <div class="container">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+          <span class="sr-only">Toggle navigation</span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+          <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#">Righter</a>
+      </div>
+      <div id="navbar" class="collapse navbar-collapse">
+        <ul class="nav navbar-nav">
+          <li class="active"><a href="#">Home</a></li>
+          <li><a href="about.html">About</a></li>
+        </ul>
+      </div>
+    </div>
+  </nav>
+  <div class="container">
+    <div class="page-header">
+      <h1>Righter Demo</h1>
+
+      <p class="lead">Righter is a free Python library for correcting English texts. We aim to
+      write good, tested code. Ready to be embeded in educational and professional
+      applications.</p>
+    </div>
+
+    <div class="row">
+      <p class="col-md-12">Demo our algorithm! Enter text below and hit <em>Check!</em></p>
+      <form id="user-entry" class="col-md-8">
+        <textarea class="form-control" rows="10" placeholder="Type in your text ..."></textarea>
+        <button type="submit" class="btn btn-primary">
+          <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
+          Check!
+        </button>
+      </form>
+      <div id="user-view" style="display: none">
+        <div class="col-md-8">
+          <div class="panel panel-default text"></div>
+          <a id="btn-edit" class="btn btn-default">
+            <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
+            Edit
+          </a>
+        </div>
+        <div class="col-md-4">
+          <div class="panel panel-warning suggestion" style="display: none">
+            <div class="panel-heading">
+              <h3 id="suggestion-title" class="panel-title"></h3>
+            </div>
+            <div id="suggestion-body" class="panel-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

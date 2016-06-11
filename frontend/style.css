@@ -1,0 +1,21 @@
+body {
+  padding-top: 50px;
+}
+h1 {
+  font-size: 63px;
+  text-align: center;
+}
+textarea {
+  margin-bottom: 20px;
+}
+#user-view .btn,
+#user-entry button {
+  margin-bottom: 30px;
+}
+#user-view .highlight {
+  background-color: #ffeb9c;
+  display: inline-block;
+}
+#user-view .text {
+  padding: 10px;
+}

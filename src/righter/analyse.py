@@ -19,7 +19,11 @@ def read_writings(file_name, mistake_type):
     writings = []
     with open(file_name, 'r') as fp:
         for line in fp:
-            writing = json.loads(line.strip())
+            try:
+                writing = json.loads(line.strip())
+            except:
+                print(line)
+                raise
             filter_changes(writing, mistake_type)
             if writing.get("changes"):
                 writings.append(writing)
@@ -66,24 +70,25 @@ def show_qualitative(baseline, predicted):
     precision_list = []
     recall_list = []
     for id_, text in writings_dict.items():
-        text = format_text(text)
-        baseline = format_changes(baseline_dict[id_])
-        predicted = format_changes(predicted_dict.get(id_, []))
-        base = flatten2(id_, baseline_dict[id_])
-        prediction = flatten2(id_, predicted_dict.get(id_, []))
-        prec = "{}".format(precision(base, prediction))
-        rec = "{}".format(recall(base, prediction))
-        row = [id_, text, baseline, predicted, prec, rec]
-        data.append(row)
-        precision_list.append(float(prec))
-        recall_list.append(float(rec))
-        level = int(level_pred_dict.get(id_, level_base_dict.get(id_, 0)))
-        precisions[level].append(float(prec))
-        recalls[level].append(float(rec))
-        nat = nat_pred_dict.get(id_, nat_base_dict.get(id_, ''))
-        precisions_per_nat[nat].append(float(prec))
-        recalls_per_nat[nat].append(float(rec))
-        total_items += 1
+        if id_ in predicted_dict:
+            text = format_text(text)
+            baseline = format_changes(baseline_dict[id_])
+            predicted = format_changes(predicted_dict.get(id_, []))
+            base = flatten2(id_, baseline_dict[id_])
+            prediction = flatten2(id_, predicted_dict.get(id_, []))
+            prec = "{}".format(precision(base, prediction))
+            rec = "{}".format(recall(base, prediction))
+            row = [id_, text, baseline, predicted, prec, rec]
+            data.append(row)
+            precision_list.append(float(prec))
+            recall_list.append(float(rec))
+            level = int(level_pred_dict.get(id_, level_base_dict.get(id_, 0)))
+            precisions[level].append(float(prec))
+            recalls[level].append(float(rec))
+            nat = nat_pred_dict.get(id_, nat_base_dict.get(id_, ''))
+            precisions_per_nat[nat].append(float(prec))
+            recalls_per_nat[nat].append(float(rec))
+            total_items += 1
     data = sorted(data, key=lambda row: float(row[-2]), reverse=True)
     headers = ["id", "text", "baseline", "predicted", "precision", "recall"]
     data.insert(0, headers)
@@ -93,26 +98,31 @@ def show_qualitative(baseline, predicted):
     print("total items: ", total_items)
     print("average precision: {} (std: {})".format(mean(precision_list), stdev(precision_list)))
     print("average recall: {} (std: {})".format(mean(recall_list), stdev(recall_list)))
-    print("level,precision,recall")
-    for level in sorted(precisions.keys()):
-        print("{},{},{}".format(level, mean(precisions[level]), mean(recalls[level])))
+    #print("level,precision,recall")
+    #for level in sorted(precisions.keys()):
+    #    print("{},{},{}".format(level, mean(precisions[level]), mean(recalls[level])))
 
-    nats = []
-    for nat in precisions_per_nat.keys():
-        if len(precisions_per_nat[nat]) > 100:
-            prec = mean(precisions_per_nat[nat])
-            rec = mean(recalls_per_nat[nat])
-            f1 = 2 * ((prec * rec) / (prec + rec))
-            nats.append((f1, nat))
+    #nats = []
+    #for nat in precisions_per_nat.keys():
+    #    if len(precisions_per_nat[nat]) > 100:
+    #        prec = mean(precisions_per_nat[nat])
+    #        rec = mean(recalls_per_nat[nat])
+    #        f1 = 2 * ((prec * rec) / (prec + rec))
+    #        nats.append((f1, nat))
 
-    print("nat,f1")
-    for f1, nat in sorted(nats, reverse=True):
-        print("{},{}".format(nat, f1))
+    #print("nat,f1")
+    #for f1, nat in sorted(nats, reverse=True):
+    #    print("{},{}".format(nat, f1))
 
 
 def show_quantitative(annotated, predicted):
-    annotated = flatten(map_id_to_field(annotated, "changes"))
-    predicted = flatten(map_id_to_field(predicted, "changes"))
+    annotated = map_id_to_field(annotated, "changes")
+    predicted = map_id_to_field(predicted, "changes")
+    for id_ in list(annotated.keys()):
+        if id_ not in predicted:
+            del annotated[id_]
+    annotated = flatten(annotated)
+    predicted = flatten(predicted)
     data = [
         ["precision", "{}".format(precision(annotated, predicted))],
         ["recall", "{}".format(recall(annotated, predicted))]
