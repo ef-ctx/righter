@@ -69,6 +69,8 @@ class StateController:
             self.change["selection"] = selection
 
     def set_symbol(self, symbol):
+        if symbol == 'NSW':
+            symbol = 'SP'
         self.change["symbol"] = symbol
     
     def set_correct(self, correct):

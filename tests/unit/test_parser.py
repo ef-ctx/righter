@@ -94,6 +94,13 @@ class ParserTestCase(unittest.TestCase):
         writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
         self.assertEqual(writings[0]['text'], text)
 
+    def test_merge_nsw_into_sp(self):
+        text = "The <change><symbol>NSW</symbol><selection>sunn</selection><correct>sun</correct></change> came up"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(writings[0]['text'], "The sunn came up")
+        self.assertEqual(writings[0]['changes'], [{"symbol": "SP", "selection": "sunn", "correct": "sun", "start": 4}])
+
     def test_extract_sp(self):
         text = "The <change><symbol>SP</symbol><selection>sunn</selection><correct>sun</correct></change> came up"
         sample = self.template.format(text)
