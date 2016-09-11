@@ -39,6 +39,12 @@ class StateController:
     def set_nationality(self, nationality):
         self.writing['nationality'] = nationality
 
+    def set_topic(self, topic):
+        self.writing['topic'] = topic
+
+    def set_grade(self, grade):
+        self.writing["grade"] = grade
+
     def end_writing(self):
         self.inside_writing = False
 
@@ -148,6 +154,15 @@ def parse(xml_file):
         elif element.tag == 'learner' and event == 'end':
             if element.get('nationality'):
                 controller.set_nationality(element.get('nationality'))
+        elif element.tag == 'topic' and event == 'end':
+            if element.get('id'):
+                controller.set_topic(element.get('id'))
+        elif element.tag == 'grade' and event == 'end':
+            if element.text:
+                try:
+                    controller.set_grade(int(element.text))
+                except ValueError:
+                    pass
         elif element.tag == 'text' and event == 'end':
             try:
                 _parse_text(controller, '<text>{}</text>'.format(element.text))
