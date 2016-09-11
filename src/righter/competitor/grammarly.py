@@ -2,21 +2,26 @@
 Script which makes calls to Grammarly, using websocket, and return the mistakes analysis
 http://grammarly.com/
 """
+import argparse
 import json
 import ssl
+import sys
 import time
+import traceback
 from datetime import datetime
 
 import websocket
 
+
 connection = None
 
-cookie = "optimizelyEndUserId=oeu1459928410487r0.9973470086697489; _mhbkts=gdn; _gat=1; grauth=AABCAbFtEQyApg22JHd-rVzeQehX0nOd5Awy46c96sRt9UCm2BxttgZT4NZ7-7l548g9Ig; redirect_location=eyJ0b2tlbiI6IkFBQkNBYkZ0RVF5QXBnMjJKSGQtclZ6ZVFlaFgwbk9kNUF3eTQ2Yzk2c1J0OVVDbTJCeHR0Z1pUNE5aNy03bDU0OGc5SWciLCJsb2NhdGlvbiI6Imh0dHA6Ly93d3cuZ3JhbW1hcmx5LmNvbS9leHRlbnNpb24tc3VjY2VzcyJ9; funnelType=free; browser_info=CHROME:48:COMPUTER:SUPPORTED:FREEMIUM; optimizelySegments=%7B%22299712489%22%3A%22gc%22%2C%22300064087%22%3A%22false%22%2C%22300337320%22%3A%22search%22%2C%22753030770%22%3A%22none%22%2C%224659346861%22%3A%22true%22%2C%224734220892%22%3A%22true%22%2C%224666431804%22%3A%22true%22%2C%224724020596%22%3A%22true%22%7D; optimizelyReferrer=; experiment_groups=001_post_reg_control2|002_post_reg_show; optimizelyBuckets=%7B%225369272632%22%3A%225399830512%22%7D; _ga=GA1.2.2091691156.1459928435; gnar_containerId=DmIkk3XbUl0K; mp_mixpanel__c=2; __fngrprnt__=uUpUxuQHv7KV; mp_c10dd64c87f70ef5563a63c368797e8c_mixpanel=%7B%22distinct_id%22%3A%20%22153ea840982d0-0d8ba8847-3d700057-240000-153ea840983677%22%2C%22%24search_engine%22%3A%20%22google%22%2C%22%24initial_referrer%22%3A%20%22https%3A%2F%2Fwww.google.co.uk%2F%22%2C%22%24initial_referring_domain%22%3A%20%22www.google.co.uk%22%2C%22__mps%22%3A%20%7B%22%24os%22%3A%20%22Linux%22%2C%22%24browser%22%3A%20%22Chrome%22%2C%22%24browser_version%22%3A%2048%2C%22%24initial_referrer%22%3A%20%22https%3A%2F%2Fwww.google.co.uk%2F%22%2C%22%24initial_referring_domain%22%3A%20%22www.google.co.uk%22%7D%2C%22__mpso%22%3A%20%7B%7D%2C%22__mpa%22%3A%20%7B%7D%2C%22__mpu%22%3A%20%7B%7D%2C%22__mpap%22%3A%20%5B%5D%7D"
-#cookie = "optimizelyEndUserId=oeu1459928410487r0.9973470086697489; gProduct=Chrome-Freemium; _mhbkts=gdn; grauth=AABCBdiDM1QKQgeU-enVbnOQAopyeHsI5OCc_GZTToDnHhLr66ZvgKMro9TKqCUMSUjVhw; isGrammarlyUser=true; _free=true; optimizelySegments=%7B%22299712489%22%3A%22gc%22%2C%22300064087%22%3A%22false%22%2C%22300337320%22%3A%22search%22%2C%22753030770%22%3A%22brand_f1%22%2C%224659346861%22%3A%22true%22%2C%224734220892%22%3A%22true%22%2C%224666431804%22%3A%22true%22%2C%224724020596%22%3A%22true%22%7D; optimizelyReferrer=; optimizelyBuckets=%7B%225369272632%22%3A%225399830512%22%7D; _ga=GA1.2.2091691156.1459928435; gnar_containerId=DmIkk3XbUl0K; mp_c10dd64c87f70ef5563a63c368797e8c_mixpanel=%7B%22distinct_id%22%3A%20440873981%2C%22%24search_engine%22%3A%20%22google%22%2C%22%24initial_referrer%22%3A%20%22https%3A%2F%2Fwww.google.co.uk%2F%22%2C%22%24initial_referring_domain%22%3A%20%22www.google.co.uk%22%2C%22__mps%22%3A%20%7B%7D%2C%22__mpso%22%3A%20%7B%7D%2C%22__mpa%22%3A%20%7B%7D%2C%22__mpu%22%3A%20%7B%7D%2C%22__mpap%22%3A%20%5B%5D%2C%22utm_source%22%3A%20%22google%22%2C%22utm_medium%22%3A%20%22cpc%22%2C%22utm_campaign%22%3A%20%22brand_f1%22%2C%22utm_content%22%3A%20%2276996511046%22%2C%22utm_term%22%3A%20%22grammarly%22%7D; __fngrprnt__=4BIClOcibJ4r; f=004_referral_control"
-headers = [
-    "Host: capi.grammarly.com",
-    "Origin: chrome-extension://kbfnbcaeplbcioakkpcpgfkobkghlhen",
-]
+COOKIE = "optimizelyEndUserId=oeu1459928410487r0.9973470086697489; intellimizeEUID=b1cc1e5a1c.1473594831; grauth=AABCnwG0eVNAm5eqZ08c7eETkEVOw7aB68scg459gsAr4Sx-WDneHzxrcUpilnDPMIdV7w; optimizely_current=; optimizely_reported=; redirect_location=eyJ0b2tlbiI6IkFBQkNud0cwZVZOQW01ZXFaMDhjN2VFVGtFVk93N2FCNjhzY2c0NTlnc0FyNFN4LVdEbmVIenhyY1VwaWxuRFBNSWRWN3ciLCJsb2NhdGlvbiI6Imh0dHBzOi8vYXBwLmdyYW1tYXJseS5jb20vIn0=; funnelType=free; browser_info=CHROME:48:COMPUTER:SUPPORTED:FREEMIUM; _ga=GA1.2.2091691156.1459928435; optimizelySegments=%7B%22299712489%22%3A%22gc%22%2C%22300064087%22%3A%22false%22%2C%22300337320%22%3A%22referral%22%2C%22753030770%22%3A%22brand_f1%22%2C%224659346861%22%3A%22true%22%2C%224734220892%22%3A%22true%22%2C%224666431804%22%3A%22true%22%2C%224724020596%22%3A%22true%22%2C%225810602057%22%3A%22true%22%7D; optimizelyReferrer=; optimizelyBuckets=%7B%225369272632%22%3A%225399830512%22%7D; isGrammarlyUser=true; _free=true; gnar_containerId=DmIkk3XbUl0K; mp_c10dd64c87f70ef5563a63c368797e8c_mixpanel=%7B%22distinct_id%22%3A%20440873981%2C%22%24search_engine%22%3A%20%22google%22%2C%22%24initial_referrer%22%3A%20%22https%3A%2F%2Fwww.google.co.uk%2F%22%2C%22%24initial_referring_domain%22%3A%20%22www.google.co.uk%22%2C%22__mps%22%3A%20%7B%7D%2C%22__mpso%22%3A%20%7B%7D%2C%22__mpa%22%3A%20%7B%7D%2C%22__mpu%22%3A%20%7B%7D%2C%22__mpap%22%3A%20%5B%5D%2C%22utm_source%22%3A%20%22google%22%2C%22utm_medium%22%3A%20%22cpc%22%2C%22utm_campaign%22%3A%20%22brand_f1%22%2C%22utm_content%22%3A%20%2276996511046%22%2C%22utm_term%22%3A%20%22grammarly%22%7D; mp_mixpanel__c=0; __fngrprnt__=4BIClOcibJ4r; experiment_groups=referral_icon_gift_text"
+HOST = "capi.grammarly.com"
+ORIGIN = "chrome-extension://kbfnbcaeplbcioakkpcpgfkobkghlhen"
+SEC_WEBSOCKET_KEY = "FeMpG84JjbpSHCJpRe0rcw=="
+
+websocket._handshake._create_sec_websocket_key = lambda: SEC_WEBSOCKET_KEY
+
 
 HELLO_MSG = {
     "token": None,
@@ -42,6 +47,7 @@ TEXT_MSG = {
 
 def wait_message():
     """
+    Wait message from websocket, return the message in the format of a dict.
     """
     try:
         msg = connection.recv()
@@ -54,27 +60,38 @@ def wait_message():
         print(msg)
         return json.loads(msg)
 
+
 def connect():
     """
     Establish a websocket connection, return channel object.
     """
+    print("trying to establish the websocket connection...")
     global connection
-    connection = websocket.create_connection(
-        "wss://capi.grammarly.com/freews",
-        cookie=cookie,
-        header=headers)
-        #subprotocols=["wamp.2.json"],
-        #timeout=settings.TIMEOUT)
-    connection.send(json.dumps(HELLO_MSG))
-    msg = wait_message()
-    assert msg["action"] == "start"
+    try:
+        connection = websocket.create_connection(
+            "wss://capi.grammarly.com/freews",
+            cookie=COOKIE,
+            host=HOST,
+            origin=ORIGIN)
+    except TimeoutError:
+        print("connection time out: retrying in 3s...")
+        time.sleep(3)
+        return connect()
+    else:
+        connection.send(json.dumps(HELLO_MSG))
+        msg = wait_message()
+        if msg["action"] != "start":
+            print("connection with problems: retrying in 1s...")
+            time.sleep(1)
+            return connect()
     return connection
+
 
 def evaluate_text(text=TEXT):
     """
     Given a text, return its analysis object.
     The analysis object contains a list of:
-        {
+            {
             "start"  # initial position
             "selection"  # string of the word or expression with issue
             "suggestions"  # may be an empty list
@@ -85,6 +102,7 @@ def evaluate_text(text=TEXT):
     """
     formatted_text = "+0:0:{}:0".format(text)
     TEXT_MSG["ch"] = [formatted_text]
+    print(TEXT_MSG)
     connection.send(json.dumps(TEXT_MSG))
     msg = wait_message()
     assert msg["action"] == "submit_ot"
@@ -107,38 +125,23 @@ def evaluate_text(text=TEXT):
             replacement = ""
             if msg["replacements"]:
                 replacement = msg["replacements"][0].lower()
-            if replacement and original_word == replacement:
+            if replacement and original_word.lower() == replacement:
                 analysis["symbol"] = "C"
             elif "spelling" in original_symbol:
                 analysis["symbol"] = "SP"
             elif "AVsAn".lower() in original_symbol:
-                analysis["symbol"] = "A"
+                analysis["symbol"] = "AR"
             if analysis not in analysis_list:
                 analysis_list.append(analysis)
     return analysis_list
 
 
-
-if __name__ == "__main__":
-    #text = TEXT
-    #print(text)
-    #evaluation = evaluate_text(text)
-    #print(evaluation)
-    #print(len(evaluation))
+def main(input_filename, output_filename):
     global connection
     connection = connect()
-
-    with open("../../../data/299.txt") as in_fp:
-        with open("../../../data/299-grammarly-p10.txt", "w") as out_fp:
-            # 310: some problem
-            # 605: another problem
-            # 712: another problem
-            # 3172: after it there was an
-            # ssl.SSLError: [SSL: TLSV1_ALERT_INTERNAL_ERROR] tlsv1 alert internal error (_ssl.c:645)
-            # 7692
-            #min_i = 8127
-            #min_i = 8130
-            min_i = 8649
+    with open(input_filename) as in_fp:
+        with open(output_filename, "w") as out_fp:
+            min_i = 0
             i = 0
             for line in in_fp:
                 if i >= min_i:
@@ -148,6 +151,7 @@ if __name__ == "__main__":
                     try:
                         data["changes"] = evaluate_text(data["text"])
                     except Exception as e:
+                        traceback.print_exc(file=sys.stdout)
                         print("EXCEPTION!!!! ", i)
                         print(e)
                     else:
@@ -164,3 +168,11 @@ if __name__ == "__main__":
                             print(e)
                             time.sleep(2)
                 i += 1
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser(description='Run grammarly in a dataset input file')
+    parser.add_argument('--input', '-i', help='Dataset input file (read-only)', required=True)
+    parser.add_argument('--output', '-o', help='Dataset output file (write)', required=True)
+    args = parser.parse_args()
+    main(args.input, args.output)
