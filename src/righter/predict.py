@@ -1,7 +1,22 @@
 import json
 import argparse
 
+import righter
+from righter.competitor import ginger
 from righter.log import logger
+
+algorithms = {
+    "ginger": ginger.check,
+    "righter": righter.check,
+    "pyenchant-hunspell": pyenchant.check_hunspell,
+    "pyenchant-aspell": pyenchant.check_aspell,
+    None: righter.check
+}
+
+
+class AlgorithmNotFound(Exception):
+    pass
+
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -10,12 +25,9 @@ if __name__ == '__main__':
     parser.add_argument('-a', '--algorithm', help='Name of the algorithm to use')
     args = parser.parse_args()
 
-    if args.algorithm is None or args.algorithm == 'righter':
-        import righter
-        check = righter.check
-    elif args.algorithm == 'ginger':
-        from righter.competitor import ginger
-        check = ginger.check
+    check = algorithms.get(args.algorithm)
+    if not check:
+        raise AlgorithmNotFound()
 
     with open(args.input_file, 'r') as input_fp:
         with open(args.file_output, 'w') as output_fp:
