@@ -1,6 +1,8 @@
 import json
 import argparse
 
+from righter.competitor import ginger
+from righter.competitor import language_tool
 from righter.log import logger
 
 if __name__ == '__main__':
@@ -16,6 +18,8 @@ if __name__ == '__main__':
     elif args.algorithm == 'ginger':
         from righter.competitor import ginger
         check = ginger.check
+    elif args.algorithm == 'lt':
+        check = language_tool.check
 
     with open(args.input_file, 'r') as input_fp:
         with open(args.file_output, 'w') as output_fp:
