@@ -152,7 +152,7 @@ def flatten(writings):
     """Flatten a dict of writings into a list of tuples. Notice that we are
     ignoring correct key right now. This is deliberated: we still do not
     support correction but only error flaging"""
-    return {(key, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for key, changes in writings.items() for change in changes}
+    return {(key, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for key, changes in writings.items() for change in changes if change.get('symbol')}
 
 
 def flatten2(id_, changes):
