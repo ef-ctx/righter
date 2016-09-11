@@ -19,12 +19,13 @@ class StateController:
         self.inside_change = False
         self.writing_failed = False
 
-    def are_changes_correct(self):
-        for change in self.writing['changes']:
-            if change['symbol'] in ('SP', 'C', 'NSW'):
-                required_keys = {'symbol', 'selection', 'start'}
-                if required_keys - set(change.keys()):
-                    return False
+    def _is_change_valid(self, change):
+        if not change.get('symbol'):
+            return False
+        if change['symbol'] in ('SP', 'C', 'NSW'):
+            required_keys = {'symbol', 'selection', 'start'}
+            if required_keys - set(change.keys()):
+                return False
         return True
 
     def start_writing(self, writing_id, level):
@@ -60,7 +61,7 @@ class StateController:
         self.update_text(self.change.get("selection"))
         # ignore changes without symbols (they are impossible to analyse
         # anyway)
-        if self.change.get('symbol'):
+        if self._is_change_valid(self.change):
             self.writing["changes"].append(self.change)
 
     def set_selection(self, selection):
@@ -164,7 +165,7 @@ def parse(xml_file):
                 controller.start_writing(element.get('id'), element.get('level'))
             else:
                 controller.end_writing()
-                if not controller.writing_failed and controller.are_changes_correct():
+                if not controller.writing_failed:
                     yield controller.writing
                 # keep etree from keeping the entire tree in memory
                 element.clear()

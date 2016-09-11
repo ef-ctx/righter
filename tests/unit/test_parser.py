@@ -143,8 +143,14 @@ class ParserTestCase(unittest.TestCase):
         writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
         self.assertFalse(writings)
 
-    def test_ignore_writings_with_bad_changes(self):
+    def test_skip_bad_changes(self):
         text = "The <change><symbol>SP</symbol><correct>sun</correct></change> came up"
         sample = self.template.format(text)
         writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
-        self.assertFalse(writings)
+        self.assertFalse(writings[0]['changes'])
+
+    def test_skip_changes_with_null_symbol(self):
+        text = "The <change><selection>sunn</selection><correct>sun</correct></change> came <change><selection>up</selection><correct>up.</correct><symbol>PU</symbol></change>"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(len(writings[0]['changes']), 1)
