@@ -1,8 +1,9 @@
-import json
-import sys
-import io
-import logging
 import collections
+import io
+import json
+import logging
+import string
+import sys
 
 from lxml import etree
 
