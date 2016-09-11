@@ -16,7 +16,8 @@ class SentenceTooBigError(Exception):
 
 
 def split_sentences(text):
-    """Splits text into sentences, whilist keeping all original punctuation.
+    """
+    Splits text into sentences, whilist keeping all original punctuation.
     Thus this is the expected output:
 
         I have an elephant! Its name is Bob. -> ["I have an elephant!", "Its name is Bob."]
@@ -36,8 +37,10 @@ def split_sentences(text):
 
 
 def merge_sentences(sentences, max_size=600):
-    """Merges phrases together up to max_size. If a sentence is too big
-    SentenceTooBigError is raised"""
+    """
+    Merges phrases together up to max_size. If a sentence is too big
+    SentenceTooBigError is raised
+    """
     result = []
     current = ''
     for sent in sentences:
@@ -72,8 +75,10 @@ def _get_suggestions(correction):
 
 
 def check(text):
-    """Given a text, query ginger API and return a list of dicts in the same
-    format as righter.check"""
+    """
+    Given a text, query ginger API and return a list of dicts in the same
+    format as righter.check
+    """
     url = 'https://services.gingersoftware.com/Ginger/correct/jsonSecured/GingerTheTextFull'
     # Ginger splits texts on sentences. So, if you have a really big
     # sentence, even ginger plugin will fail. It does make sense to split by

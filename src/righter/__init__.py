@@ -30,7 +30,6 @@ def check_spelling(original_text):
     words = text.split()
     response = []
     for word in words:
-        print(word)
         if not d.check(word):
             for pos in findall(word, text):
                 item = {
