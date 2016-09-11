@@ -11,8 +11,7 @@ TEXTWRAP = 40
 
 
 def filter_changes(writing, mistake_type):
-    if mistake_type is not None:
-        writing["changes"] = [i for i in writing["changes"] if i["symbol"] == mistake_type]
+    writing["changes"] = [i for i in writing["changes"] if i.get('symbol') and i["symbol"] in mistake_type]
 
 
 def read_writings(file_name, mistake_type):
@@ -177,13 +176,13 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--annotated-file', help='Annotated input file', required=True)
     parser.add_argument('-p', '--predicted-file', help='Predicted input file', required=True)
-    parser.add_argument('-m', '--mistake-type', help='Type of mistake', choices=['AR', 'C', 'SP', 'NSW'])
+    parser.add_argument('-m', '--mistake-types', help='Types of mistake to analyse', nargs='+', default=['AR', 'C', 'SP'])
     parser.add_argument('-t', '--analysis-type', help='Type of analysis', default='all', choices=['all', 'quantitative', 'qualitative'])
     parser.add_argument('-o', '--file-output', help='Save analysis to output file')
     args = parser.parse_args()
 
-    annotated = read_writings(args.annotated_file, args.mistake_type)
-    predicted = read_writings(args.predicted_file, args.mistake_type)
+    annotated = read_writings(args.annotated_file, args.mistake_types)
+    predicted = read_writings(args.predicted_file, args.mistake_types)
     if args.analysis_type in ["all", "qualitative"]:
         print("\nDetailed comparison")
         show_qualitative(annotated, predicted)
