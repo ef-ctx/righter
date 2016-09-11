@@ -3,10 +3,14 @@ import argparse
 
 import righter
 from righter.competitor import ginger
+from righter.competitor import language_tool
+from righter.competitor import pyenchant
 from righter.log import logger
+
 
 algorithms = {
     "ginger": ginger.check,
+    "language-tool": language_tool.check,
     "righter": righter.check,
     "pyenchant-hunspell": pyenchant.check_hunspell,
     "pyenchant-aspell": pyenchant.check_aspell,
