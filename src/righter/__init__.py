@@ -3,6 +3,7 @@ Identifies common English writing mistakes
 """
 import re
 import unicodedata
+import enchant
 from righter import dictionary
 from righter import utils
 
@@ -23,6 +24,24 @@ def findall(sub, string):
 
 
 def check_spelling(original_text):
+    text = utils.asciify(original_text)
+    text = utils.remove_punctuation(text)
+    d = enchant.Dict("en_US")
+    words = text.split()
+    response = []
+    for word in words:
+        print(word)
+        if not d.check(word):
+            for pos in findall(word, text):
+                item = {
+                    "selection": original_text[pos: (pos + len(word))],
+                    "start": pos
+                }
+                if item not in response:
+                    response.append(item)
+    return response
+
+def check_spelling_original(original_text):
     """
     Check if a text has spelling errors.
     Return a list with objects:
