@@ -127,7 +127,7 @@ def parse(xml_file):
                 I(x) - insert x
                 MW - missing word
                 NS - new sentence
-                NWS - no such word
+                NSW - no such word
                 PH - phraseology
                 PL - plural
                 PO - possessive
