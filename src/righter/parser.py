@@ -1,8 +1,9 @@
-import json
-import sys
-import io
-import logging
 import collections
+import io
+import json
+import logging
+import string
+import sys
 
 from lxml import etree
 
@@ -18,12 +19,13 @@ class StateController:
         self.inside_change = False
         self.writing_failed = False
 
-    def are_changes_correct(self):
-        for change in self.writing['changes']:
-            if change['symbol'] in ('SP', 'C', 'NSW'):
-                required_keys = {'symbol', 'selection', 'start'}
-                if required_keys - set(change.keys()):
-                    return False
+    def _is_change_valid(self, change):
+        if not change.get('symbol'):
+            return False
+        if change['symbol'] in ('SP', 'C', 'NSW'):
+            required_keys = {'symbol', 'selection', 'start'}
+            if required_keys - set(change.keys()):
+                return False
         return True
 
     def start_writing(self, writing_id, level):
@@ -56,10 +58,10 @@ class StateController:
 
     def end_change(self):
         self.inside_change = False
-        self.writing["text"] += self.change.get("selection", "") or ""
+        self.update_text(self.change.get("selection"))
         # ignore changes without symbols (they are impossible to analyse
         # anyway)
-        if self.change.get('symbol'):
+        if self._is_change_valid(self.change):
             self.writing["changes"].append(self.change)
 
     def set_selection(self, selection):
@@ -67,6 +69,8 @@ class StateController:
             self.change["selection"] = selection
 
     def set_symbol(self, symbol):
+        if symbol == 'NSW':
+            symbol = 'SP'
         self.change["symbol"] = symbol
     
     def set_correct(self, correct):
@@ -77,9 +81,24 @@ class StateController:
     def offset(self):
         return len(self.writing["text"])
 
+    def _needs_space(self, a, b):
+        if not a or not b:
+            return False
+
+        if any(map(a.endswith, string.punctuation)) and not any(map(b.startswith, string.whitespace)):
+            return True
+        elif not any(map(a.endswith, string.whitespace)):
+            return not any(map(b.startswith, string.whitespace + string.punctuation))
+
+        return False
+
     def update_text(self, text):
         if text:
-            self.writing["text"] += text
+            if self._needs_space(self.writing["text"], text):
+                separator = ' '
+            else:
+                separator = ''
+            self.writing["text"] += separator + text
 
 
 def _parse_text(controller, blob):
@@ -93,8 +112,7 @@ def _parse_text(controller, blob):
                 controller.start_change()
             else:
                 controller.end_change()
-                if element.tail:
-                    controller.update_text(' {}'.format(element.tail))
+                controller.update_text(element.tail)
         elif element.tag == 'selection' and event == 'end':
             controller.set_selection(element.text)
         elif element.tag == 'symbol' and event == 'end':
@@ -107,8 +125,7 @@ def _parse_text(controller, blob):
             else:
                 controller.update_text('\n')
         elif not controller.inside_change and event == 'end':
-            if element.tail:
-                controller.update_text(' {}'.format(element.tail))
+            controller.update_text(element.tail)
 
 
 def parse(xml_file):
@@ -150,7 +167,7 @@ def parse(xml_file):
                 controller.start_writing(element.get('id'), element.get('level'))
             else:
                 controller.end_writing()
-                if not controller.writing_failed and controller.are_changes_correct():
+                if not controller.writing_failed:
                     yield controller.writing
                 # keep etree from keeping the entire tree in memory
                 element.clear()
