@@ -56,8 +56,11 @@ class StateController:
 
     def end_change(self):
         self.inside_change = False
-        self.writing["changes"].append(self.change)
         self.writing["text"] += self.change.get("selection", "") or ""
+        # ignore changes without symbols (they are impossible to analyse
+        # anyway)
+        if self.change.get('symbol'):
+            self.writing["changes"].append(self.change)
 
     def set_selection(self, selection):
         if selection:
