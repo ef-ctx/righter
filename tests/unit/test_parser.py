@@ -101,8 +101,50 @@ class ParserTestCase(unittest.TestCase):
         self.assertEqual(writings[0]['text'], "The sunn came up")
         self.assertEqual(writings[0]['changes'], [{"symbol": "SP", "selection": "sunn", "correct": "sun", "start": 4}])
 
+    def test_handle_punctuation(self):
+        text = "I like the <change><symbol>SP</symbol><selection>sunn</selection><correct>sun</correct></change>. Don't you?"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(writings[0]['text'], "I like the sunn. Don't you?")
+
+    def test_handle_no_space(self):
+        text = "I like the <change><symbol>SP</symbol><selection>sunn</selection><correct>sun</correct></change>Don't you?"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(writings[0]['text'], "I like the sunn Don't you?")
+
+    def test_handle_no_space_beginning(self):
+        text = "I like the<change><symbol>SP</symbol><selection>sunn</selection><correct>sun</correct></change> Don't you?"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(writings[0]['text'], "I like the sunn Don't you?")
+
+    def test_handle_no_space_punctuation_beginning(self):
+        text = "I like the,<change><symbol>SP</symbol><selection>sunn</selection><correct>sun</correct></change> Don't you?"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(writings[0]['text'], "I like the, sunn Don't you?")
+
+    def test_handle_no_space_at_all(self):
+        text = "I like the<change><symbol>SP</symbol><selection>sunn</selection><correct>sun</correct></change>don't you?"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(writings[0]['text'], "I like the sunn don't you?")
+
+    def test_handle_punctuation_in_selection(self):
+        text = "I like the<change><symbol>SP</symbol><selection>sunn,</selection><correct>sun</correct></change>don't you?"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertEqual(writings[0]['text'], "I like the sunn, don't you?")
+
     def test_ignore_bad_xml(self):
         text = "The <change> came up"
+        sample = self.template.format(text)
+        writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
+        self.assertFalse(writings)
+
+    def test_ignore_writings_with_bad_changes(self):
+        text = "The <change><symbol>SP</symbol><correct>sun</correct></change> came up"
         sample = self.template.format(text)
         writings = list(parser.parse(io.BytesIO(sample.encode('utf-8'))))
         self.assertFalse(writings)

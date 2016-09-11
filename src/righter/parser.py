@@ -57,7 +57,7 @@ class StateController:
 
     def end_change(self):
         self.inside_change = False
-        self.writing["text"] += self.change.get("selection", "") or ""
+        self.update_text(self.change.get("selection"))
         # ignore changes without symbols (they are impossible to analyse
         # anyway)
         if self.change.get('symbol'):
@@ -78,9 +78,24 @@ class StateController:
     def offset(self):
         return len(self.writing["text"])
 
+    def _needs_space(self, a, b):
+        if not a or not b:
+            return False
+
+        if any(map(a.endswith, string.punctuation)) and not any(map(b.startswith, string.whitespace)):
+            return True
+        elif not any(map(a.endswith, string.whitespace)):
+            return not any(map(b.startswith, string.whitespace + string.punctuation))
+
+        return False
+
     def update_text(self, text):
         if text:
-            self.writing["text"] += text
+            if self._needs_space(self.writing["text"], text):
+                separator = ' '
+            else:
+                separator = ''
+            self.writing["text"] += separator + text
 
 
 def _parse_text(controller, blob):
@@ -94,8 +109,7 @@ def _parse_text(controller, blob):
                 controller.start_change()
             else:
                 controller.end_change()
-                if element.tail:
-                    controller.update_text(' {}'.format(element.tail))
+                controller.update_text(element.tail)
         elif element.tag == 'selection' and event == 'end':
             controller.set_selection(element.text)
         elif element.tag == 'symbol' and event == 'end':
@@ -108,8 +122,7 @@ def _parse_text(controller, blob):
             else:
                 controller.update_text('\n')
         elif not controller.inside_change and event == 'end':
-            if element.tail:
-                controller.update_text(' {}'.format(element.tail))
+            controller.update_text(element.tail)
 
 
 def parse(xml_file):
