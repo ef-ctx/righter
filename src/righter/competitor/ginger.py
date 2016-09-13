@@ -8,7 +8,7 @@ TYPE_MAP = {
     1: 'SP',
 }
 
-#session = requests_cache.CachedSession('ginger', backend=settings.REQUESTS_CACHE_BACKEND)
+session = requests_cache.CachedSession('ginger', backend=settings.REQUESTS_CACHE_BACKEND)
 
 
 class SentenceTooBigError(Exception):
