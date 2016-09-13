@@ -74,7 +74,7 @@ NAMES_LOWER = {name.lower() for name in NAMES}
 
 
 def is_name(text):
-    return utils.asciify(text.strip()) in NAMES
+    return utils.asciify(text.strip()) in NAMES.union({"USA"})
 
 
 def is_english_abbreviation(text):

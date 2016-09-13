@@ -71,6 +71,7 @@ def check_capitalization(text):
             "start": <position-of-the-first-character-in-string>
         }
     """
+    
     response = []
     sentences = re.split('[!?.]+', text)  # TODO: add \n
     pos = 0
@@ -108,12 +109,13 @@ def check_capitalization(text):
                             "start": pos + relative_pos
                         }
                         response.append(item)
-                elif (word != word.capitalize() and must_be_capital):
-                    item = {
-                        "selection": word,
-                        "start": pos + relative_pos
-                    }
-                    response.append(item)
+                elif must_be_capital:
+                    if not (word == word.upper() or word == word.capitalize()):
+                        item = {
+                            "selection": word,
+                            "start": pos + relative_pos
+                        }
+                        response.append(item)
                 relative_pos += (len(word))
                         
             pos += len(sentence) + 1
