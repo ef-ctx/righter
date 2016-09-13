@@ -5,6 +5,7 @@ import righter
 from righter.competitor import ginger
 from righter.competitor import language_tool
 from righter.competitor import pyenchant
+from righter.competitor import whitesmoke
 from righter.log import logger
 
 
@@ -14,6 +15,7 @@ algorithms = {
     "righter": righter.check,
     "pyenchant-hunspell": pyenchant.check_hunspell,
     "pyenchant-aspell": pyenchant.check_aspell,
+    "whitesmoke": whitesmoke.check,
     None: righter.check
 }
 
