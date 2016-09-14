@@ -16,6 +16,30 @@ class WhitesmokeCheckTestCase(unittest.TestCase):
         ]
         self.assertEqual(whitesmoke.check("I have a elephant."), expected)
 
+    def test_count_whitespaces_and_newlines_middle(self):
+        expected = [
+            {
+                "originalSymbol": 'grammar.12',
+                "selection": "a",
+                "start": 13,
+                "suggestions": ["an"],
+                "symbol": "AR"
+            }
+        ]
+        self.assertEqual(whitesmoke.check("I\n\n     have a elephant."), expected)
+
+    def test_count_whitespaces_and_newlines_beginning(self):
+        expected = [
+            {
+                "originalSymbol": 'grammar.12',
+                "selection": "a",
+                "start": 14,
+                "suggestions": ["an"],
+                "symbol": "AR"
+            }
+        ]
+        self.assertEqual(whitesmoke.check("\n\n     I have a elephant."), expected)
+
     def test_check_spelling(self):
         expected = [
             {
