@@ -10,11 +10,11 @@ from terminaltables import AsciiTable
 TEXTWRAP = 40
 
 
-def filter_changes(writing, mistake_type):
-    writing["changes"] = [i for i in writing["changes"] if i.get('symbol') and i["symbol"] in mistake_type]
+def filter_changes(writing, mistake_types):
+    writing["changes"] = [i for i in writing["changes"] if i.get('symbol') and i["symbol"] in mistake_types]
 
 
-def read_writings(file_name, mistake_type):
+def read_writings(file_name, mistake_types):
     writings = []
     with open(file_name, 'r') as fp:
         for line in fp:
@@ -23,7 +23,8 @@ def read_writings(file_name, mistake_type):
             except:
                 print(line)
                 raise
-            filter_changes(writing, mistake_type)
+            if mistake_types:
+                filter_changes(writing, mistake_types)
             if writing.get("changes"):
                 writings.append(writing)
     return writings
@@ -49,7 +50,7 @@ def format_text(text):
     return "\n".join(chunks)
 
 
-def show_qualitative(baseline, predicted):
+def show_qualitative(baseline, predicted, ignore_types=False):
     data = []
     
     baseline_dict = map_id_to_field(baseline, "changes")
@@ -73,8 +74,8 @@ def show_qualitative(baseline, predicted):
             text = format_text(text)
             baseline = format_changes(baseline_dict[id_])
             predicted = format_changes(predicted_dict.get(id_, []))
-            base = flatten2(id_, baseline_dict[id_])
-            prediction = flatten2(id_, predicted_dict.get(id_, []))
+            base = flatten2(id_, baseline_dict[id_], ignore_types)
+            prediction = flatten2(id_, predicted_dict.get(id_, []), ignore_types)
             prec = "{}".format(precision(base, prediction))
             rec = "{}".format(recall(base, prediction))
             row = [id_, text, baseline, predicted, prec, rec]
@@ -114,14 +115,14 @@ def show_qualitative(baseline, predicted):
     #    print("{},{}".format(nat, f1))
 
 
-def show_quantitative(annotated, predicted):
+def show_quantitative(annotated, predicted, ignore_types=False):
     annotated = map_id_to_field(annotated, "changes")
     predicted = map_id_to_field(predicted, "changes")
     for id_ in list(annotated.keys()):
         if id_ not in predicted:
             del annotated[id_]
-    annotated = flatten(annotated)
-    predicted = flatten(predicted)
+    annotated = flatten(annotated, ignore_types)
+    predicted = flatten(predicted, ignore_types)
     data = [
         ["precision", "{}".format(precision(annotated, predicted))],
         ["recall", "{}".format(recall(annotated, predicted))]
@@ -147,15 +148,21 @@ def show_mismatches(annotated, predicted, precision=True):
         print(k, v)
 
 
-def flatten(writings):
+def flatten(writings, ignore_types=False):
     """Flatten a dict of writings into a list of tuples. Notice that we are
     ignoring correct key right now. This is deliberated: we still do not
     support correction but only error flaging"""
-    return {(key, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for key, changes in writings.items() for change in changes if change.get('symbol')}
+    if ignore_types:
+        return {(key, change['start']) for key, changes in writings.items() for change in changes}
+    else:
+        return {(key, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for key, changes in writings.items() for change in changes if change.get('symbol')}
 
 
-def flatten2(id_, changes):
-    return {(id_, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for change in changes}
+def flatten2(id_, changes, ignore_types):
+    if ignore_types:
+        return {(id_, change['start']) for change in changes}
+    else:
+        return {(id_, change['start'], change.get('selection', "").strip(), change['symbol'].strip()) for change in changes if 'symbol' in change}
 
 
 def precision(annotations, predictions):
@@ -176,18 +183,22 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('-i', '--annotated-file', help='Annotated input file', required=True)
     parser.add_argument('-p', '--predicted-file', help='Predicted input file', required=True)
-    parser.add_argument('-m', '--mistake-types', help='Types of mistake to analyse', nargs='+', default=['AR', 'C', 'SP'])
+    parser.add_argument('-m', '--mistake-types', help='Types of mistake to analyse', nargs='+')
     parser.add_argument('-t', '--analysis-type', help='Type of analysis', default='all', choices=['all', 'quantitative', 'qualitative'])
     parser.add_argument('-o', '--file-output', help='Save analysis to output file')
     args = parser.parse_args()
+    if not args.mistake_types:
+        ignore_types = True
+    else:
+        ignore_types = False
 
     annotated = read_writings(args.annotated_file, args.mistake_types)
     predicted = read_writings(args.predicted_file, args.mistake_types)
     if args.analysis_type in ["all", "qualitative"]:
         print("\nDetailed comparison")
-        show_qualitative(annotated, predicted)
+        show_qualitative(annotated, predicted, ignore_types=ignore_types)
 
     if args.analysis_type in ["all", 'quantitative']:
         print("\nSummary")
-        show_quantitative(annotated, predicted)
+        show_quantitative(annotated, predicted, ignore_types=ignore_types)
 
