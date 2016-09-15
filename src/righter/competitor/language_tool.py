@@ -8,6 +8,15 @@ DEFAULT_SYMBOL_CONVERSION = {
     'UPPERCASE_SENTENCE_START': 'C',
 }
 
+# Mistakes that are not mapped on our annotated data
+IGNORE_RULES = [
+    "SENTENCE_WHITESPACE",
+    "WHITESPACE_RULE",
+    "COMMA_PARENTHESIS_WHITESPACE",
+    "EN_UNPAIRED_BRACKETS"
+]
+
+
 def _get_selection(text, match):
     start = match.offset
     end = match.offset + match.errorlength
@@ -26,15 +35,16 @@ def _convert_symbol(text, match):
 def check(text):
     changes = []
     for match in tool.check(text):
-        symbol = _convert_symbol(text, match)
-        change = {
-            "explanation": match.msg,
-            "originalSymbol": match.ruleId,
-            "selection": _get_selection(text, match),
-            "start": match.offset,
-            "suggestions": match.replacements,
-        }
-        if symbol:
-            change["symbol"] = symbol
-        changes.append(change)
+        if match.ruleId not in IGNORE_RULES:
+            symbol = _convert_symbol(text, match)
+            change = {
+                "explanation": match.msg,
+                "originalSymbol": match.ruleId,
+                "selection": _get_selection(text, match),
+                "start": match.offset,
+                "suggestions": match.replacements,
+            }
+            if symbol:
+                change["symbol"] = symbol
+            changes.append(change)
     return changes
