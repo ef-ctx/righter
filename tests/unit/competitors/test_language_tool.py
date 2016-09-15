@@ -54,3 +54,15 @@ class LanguageToolCheckTestCase(unittest.TestCase):
             }
         ]
         self.assertEqual(language_tool.check("I bought an elephant last tuesday."), expected)
+
+    def test_unknown_mistake(self):
+        expected = [
+            {
+                "explanation": "Did you mean 'am'?",
+                "originalSymbol": 'PERS_PRONOUN_AGREEMENT_SENT_START',
+                "selection": "is",
+                "start": 2,
+                "suggestions": ["am"]
+            }
+        ]
+        self.assertEqual(language_tool.check("I is nice."), expected)

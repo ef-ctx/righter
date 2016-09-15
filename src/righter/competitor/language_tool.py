@@ -27,13 +27,14 @@ def check(text):
     changes = []
     for match in tool.check(text):
         symbol = _convert_symbol(text, match)
+        change = {
+            "explanation": match.msg,
+            "originalSymbol": match.ruleId,
+            "selection": _get_selection(text, match),
+            "start": match.offset,
+            "suggestions": match.replacements,
+        }
         if symbol:
-            changes.append({
-                "explanation": match.msg,
-                "originalSymbol": match.ruleId,
-                "selection": _get_selection(text, match),
-                "start": match.offset,
-                "suggestions": match.replacements,
-                "symbol": symbol,
-            })
+            change["symbol"] = symbol
+        changes.append(change)
     return changes
