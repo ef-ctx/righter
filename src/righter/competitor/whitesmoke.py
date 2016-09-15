@@ -50,9 +50,10 @@ def check(text):
                     "selection": correction["word"],
                     "start": correction["fromPos"] + offset,
                     "originalSymbol": error_type,
-                    "symbol": symbol,
                     "suggestions": [],
                 }
+                if symbol:
+                    grouped_suggestions[symbol]["symbol"] = symbol
                 if "replace" in suggestion:
                     grouped_suggestions[symbol]["suggestions"].append(suggestion["replace"])
         changes.extend(grouped_suggestions.values())

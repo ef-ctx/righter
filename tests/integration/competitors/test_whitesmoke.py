@@ -94,3 +94,17 @@ class WhitesmokeCheckTestCase(unittest.TestCase):
         ]
         result = whitesmoke.check("I bought an elephant last tuesday.")
         self.assertEqual(result, expected)
+
+    def test_check_unknown_mistake(self):
+        expected = [
+            {
+                "originalSymbol": 'grammar.60',
+                "selection": "is",
+                "start": 2,
+                "suggestions": [
+                    "am",
+                ],
+            }
+        ]
+        result = whitesmoke.check("I is nice.")
+        self.assertEqual(result, expected)
