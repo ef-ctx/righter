@@ -101,3 +101,16 @@ class GingerCheckTestCase(unittest.TestCase):
         all work and no play makes Jack a dull boy.
         """.split())
         self.assertEqual(ginger.check(text), expected)
+
+    def test_unknonw_mistake(self):
+        expected = [
+            {
+                "correction": "am",
+                "originalSymbol": 3,
+                'selection': 'is',
+                'start': 2,
+                'suggestions': ['am', 'have been', 'am being']
+            }
+        ]
+        text = "I is nice."
+        self.assertEqual(ginger.check(text), expected)

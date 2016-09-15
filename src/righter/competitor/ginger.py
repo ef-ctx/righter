@@ -58,9 +58,14 @@ def merge_sentences(sentences, max_size=600):
 
 def _get_type(correction, text):
     word = _get_word(correction, text)
-    type_ = TYPE_MAP.get(correction["Type"], "undefined")
+    type_ = TYPE_MAP.get(correction["Type"])
     if type_ == 'SP' and any(c['Text'].lower() == word for c in correction['Suggestions']):
         type_ = 'C'
+    elif type_ == 'AR' and not any(suggestion['LrnCatId'] == 12 for suggestion in correction["Suggestions"]):
+        # TODO: This is not the best solution for identifying the type
+        # (see whitesmoke for a possible solution). However, since we
+        # are going to ignore the symbol for now, this is as good as any
+        return None
     return type_
 
 
@@ -104,9 +109,11 @@ def check(text):
             change = {
                 'selection': _get_word(correction, sentence),
                 'start': correction['From'] + offset,
-                'symbol': _get_type(correction, sentence),
                 'originalSymbol': correction["Type"],
             }
+            symbol = _get_type(correction, sentence)
+            if symbol:
+                change['symbol'] = symbol
             change['suggestions'] = _get_suggestions(correction)
             if change['suggestions']:
                 change['correction'] = change['suggestions'][0]
