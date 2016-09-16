@@ -25,6 +25,9 @@ $(function() {
         text += "<li>Name of countries and languages</li>";
         body.html(text);
         break;
+      default:
+        // Do not show explanation box
+        return;
     }
     $("#user-view .suggestion").show();
   };
