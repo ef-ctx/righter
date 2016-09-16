@@ -115,12 +115,28 @@ def show_qualitative(baseline, predicted, ignore_types=False):
     #    print("{},{}".format(nat, f1))
 
 
+def top_missed_symbols(annotated, predicted):
+    annotated = flatten(annotated)
+    predicted = flatten(predicted, ignore_types=True)
+    symbols = collections.defaultdict(lambda: 0)
+    for mistake in annotated:
+        found = False
+        for predict in predicted:
+            if mistake[:2] == predict[:2]:
+                found = True
+        if not found:
+            symbols[mistake[3]] += 1
+    for key, value in sorted(symbols.items(), key=lambda x: x[1]):
+        print(key, value)
+
+
 def show_quantitative(annotated, predicted, ignore_types=False):
     annotated = map_id_to_field(annotated, "changes")
     predicted = map_id_to_field(predicted, "changes")
     for id_ in list(annotated.keys()):
         if id_ not in predicted:
             del annotated[id_]
+    #top_missed_symbols(annotated, predicted)
     annotated = flatten(annotated, ignore_types)
     predicted = flatten(predicted, ignore_types)
     data = [
