@@ -90,4 +90,14 @@ $(function() {
         dataType: "json"
     }).done(displayCorrections);
   });
+
+  $('#example').on('click', function() {
+    $.ajax({
+        url: "http://localhost:8000/example",
+        dataType: "json"
+    }).done(function(json) {
+        $('#id').val(json.id);
+        $('#text-entry').html(json.text);
+    });
+  });
 });
