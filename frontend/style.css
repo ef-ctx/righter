@@ -12,10 +12,17 @@ textarea {
 #user-entry button {
   margin-bottom: 30px;
 }
-#user-view .highlight {
-  background-color: #ffeb9c;
-  display: inline-block;
-}
+
 #user-view .text {
   padding: 10px;
+  line-height: 25px;
+}
+
+#id {
+    margin-bottom: 10px;
+}
+
+#algorithm {
+    display: block;
+    margin-bottom: 10px;
 }

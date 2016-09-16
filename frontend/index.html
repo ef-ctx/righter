@@ -36,12 +36,35 @@
     </div>
 
     <div class="row">
-      <p class="col-md-12">Demo our algorithm! Enter text below and hit <em>Check!</em></p>
+    </div>
+
+    <div class="row">
+      <div class="col-md-12">
+        <p>Out of ideas? Use one of our examples!</p>
+        <p>Demo our algorithm! Enter text below or enter an ID and hit
+        <em>Check!</em></p>
+      </div>
       <form id="user-entry" class="col-md-8">
-        <textarea class="form-control" rows="10" placeholder="Type in your text ..."></textarea>
+        <label for="algorithm">Algorithm</label>
+        <select class="form-control" id="algorithm">
+          <option value="pyencnant-aspell">Pyenchant &amp; aspell</option>
+          <option value="pyenchant-hunspell">Pyenchant &amp; hunspell</option>
+          <option value="grammarly">Grammarly</option>
+          <option value="ginger">Ginger</option>
+          <option value="language-tool">Language Tool</option>
+          <option value="whitesmoke">Whitesmoke</option>
+          <option value="righter" selected>Righter</option>
+        </select>
+        <label for="id">Document ID</label>
+        <input class="form-control" type="text" name="id" id="id" placeholder="Document ID">
+        <label for="text-entry">Text</label>
+        <textarea id="text-entry" class="form-control" rows="10" placeholder="Type in your text ..."></textarea>
         <button type="submit" class="btn btn-primary">
           <span class="glyphicon glyphicon-ok" aria-hidden="true"></span>
           Check!
+        </button>
+        <button type="button" class="btn btn-default">
+          Generate example
         </button>
       </form>
       <div id="user-view" style="display: none">
@@ -51,6 +74,19 @@
             <span class="glyphicon glyphicon-edit" aria-hidden="true"></span>
             Edit
           </a>
+          <div id="analysis" class="panel panel-default">
+            <div class="panel-heading"><h4>Analysis</h4></div>
+            <div class="panel-body">
+              <p>We are able to calculate the precision and recall when given an annotated example. If you see no numbers below, it means you entered your own text.</p>
+              <p>In order to get one of our annotated examples, click on <code>generate example</code> and then <code>check</code> without changing anything.</p>
+              <dl class="dl-horizontal">
+                <dt>Precision:</dt>
+                <dd class="precision"></dd>
+                <dt>Recall:</dt>
+                <dd class="recall"></dd>
+              </dl>
+            </div>
+          </div>
         </div>
         <div class="col-md-4">
           <div class="panel panel-warning suggestion" style="display: none">
