@@ -105,7 +105,11 @@ def evaluate_text(text=TEXT):
     print(TEXT_MSG)
     connection.send(json.dumps(TEXT_MSG))
     msg = wait_message()
-    assert msg["action"] == "submit_ot"
+    if msg["action"] != "submit_ot":
+        global connection
+        connection = connect()
+        return evaluate_text(text)
+        
     text_id = msg["id"]
     analysis_list = []
     while not msg["action"] == "finished":
