@@ -3,3 +3,4 @@ libxml2-dev
 libxslt1-dev
 libxs-dev
 python-dev
+zlib1g-dev
