@@ -36,12 +36,12 @@ $(function() {
     $("#user-view .suggestion").hide();
   };
 
-  var displayCorrections = function(resp) {
+  var displayCorrections = function(text, response) {
     $('#user-entry').hide();
     $('#user-view').show();
 
-    var item = resp.item;
-    var analysis = resp.analysis;
+    var changes = response.changes;
+    var analysis = response.analysis;
 
     if (analysis) {
         $(".precision").html(analysis.precision);
@@ -52,20 +52,19 @@ $(function() {
     }
 
     // sort in descending order, so added <span>s don't mess up the offset.
-    item.changes.sort(function(a, b) {
+    changes.sort(function(a, b) {
       return b.start - a.start;
     });
-    var text = item.text;
-    for (var i = 0; i < item.changes.length; i++) {
-      var start = item.changes[i].start;
-      var end = start + item.changes[i].selection.length;
+    for (var i = 0; i < changes.length; i++) {
+      var start = changes[i].start;
+      var end = start + changes[i].selection.length;
 
       var prev = text.slice(0, start);
       var after = text.slice(end, text.length);
 
-      var span = '<mark data-symbol="' + item.changes[i].symbol + '" ';
-      span += '         data-selection="' + item.changes[i].selection + '">';
-      text = prev + span + item.changes[i].selection + "</mark>" + after;
+      var span = '<mark data-symbol="' + changes[i].symbol + '" ';
+      span += '         data-selection="' + changes[i].selection + '">';
+      text = prev + span + changes[i].selection + "</mark>" + after;
     }
 
     $("#user-view .text").html(text);
@@ -88,15 +87,19 @@ $(function() {
     $('#user-entry button').prop('disabled', true);
     // send text to API
     $.ajax({
-        url: "http://localhost:8000/corr",
-        data: {text: text, id: id, algorithm: algo},
+        url: "/predict",
+        method: "POST",
+        data: JSON.stringify({text: text, id: id, algorithm: algo}),
+        contentType: "application/json; charset=utf-8",
         dataType: "json"
-    }).done(displayCorrections);
+    }).done(function(response) {
+        displayCorrections(text, response);
+    });
   });
 
   $('#example').on('click', function() {
     $.ajax({
-        url: "http://localhost:8000/example",
+        url: "/essays?random=1",
         dataType: "json"
     }).done(function(json) {
         $('#id').val(json.id);
