@@ -1,4 +1,23 @@
+html {
+    position: relative;
+    min-height: 100%;
+}
+
+footer {
+    background-color: #000;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100px;
+    width: 100%;
+    overflow: hidden;
+    color: #fff;
+    padding-top: 20px;
+}
+
 body {
+  margin: 0 0 100px;
+  padding: 25px;
   padding-top: 50px;
 }
 h1 {
