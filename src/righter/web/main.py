@@ -77,12 +77,12 @@ ESSAY_C178718 = {
 }
 
 
-@app.route('/static/<path:path>')
-def retrieve_static(path):
+@app.route('/')
+def retrieve_index():
     """
-    Return static files. We're using the 'default directory: `static`
+    Return index.html
     """
-    return send_from_directory('', path)
+    return send_from_directory(app.static_folder, 'index.html')
 
 
 @app.route("/healthcheck")
