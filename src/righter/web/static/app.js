@@ -2,32 +2,53 @@ $(function() {
   var showSuggestion = function() {
     var title = $('#suggestion-title');
     var body = $('#suggestion-body');
+    var selection = $(this).data("selection");
+    var algo = $(this).data("algo");
+    var explanation = $(this).data("explanation");
+    var suggestions = $(this).data("suggestions").split("///");
+    var righterText;
     switch ($(this).data("symbol")) {
       case "AR":
         title.html("Incorrect article usage");
-        body.html("We use <em>a</em> or <em>an</em> when a noun is new or unknown. We use <em>a</em>" +
-          "before words that begin with a consonant sound (a carrot) and <em>an</em>" +
-          "before words that begin with a vowel sound (an orange, an hour).");
+        righterText = "We use <em>a</em> or <em>an</em> when a noun is new or unknown. We use <em>a</em>";
+        righterText += "before words that begin with a consonant sound (a carrot) and <em>an</em>";
+        righterText += "before words that begin with a vowel sound (an orange, an hour).";
         break;
       case "SP":
         title.html("Incorrect spelling");
-        var word = $(this).data("selection");
-        body.html("We could not find the word <em>" + word + "</em> in our dictionary.");
+        righterText = "We could not find the word <em>" + selection + "</em> in our dictionary.";
         break;
       case "C":
         title.html("Incorrect capitalization");
-        var text = "A capitalized word is one beginning with an upper case letter. We capitalize words in the following situations:";
-        text += "<ul>";
-        text += "<li>Beginning of a sentence</li>";
-        text += "<li>Proper nouns</li>";
-        text += "<li>The pronoun <em>I</em></li>";
-        text += "<li>Names of months and days of the week</li>";
-        text += "<li>Name of countries and languages</li>";
-        body.html(text);
+        righterText = "A capitalized word is one beginning with an upper case letter. We capitalize words in the following situations:";
+        righterText += "<ul>";
+        righterText += "<li>Beginning of a sentence</li>";
+        righterText += "<li>Proper nouns</li>";
+        righterText += "<li>The pronoun <em>I</em></li>";
+        righterText += "<li>Names of months and days of the week</li>";
+        righterText += "<li>Name of countries and languages</li>";
         break;
       default:
         // Do not show explanation box
         return;
+    }
+    var text = "";
+    if (explanation) {
+      text += "<p>" + explanation + "</p>";
+    }
+    if (suggestions.length > 0) {
+      text += "<p>Suggestions:</p>";
+      text += "<ul>";
+      for (var i = 0; i < suggestions.length; i++) {
+        text += "<li>" + suggestions[i] + "</li>";
+      }
+      text += "</ul>";
+    }
+
+    if (algo == 'righter') {
+      body.html(righterText);
+    } else {
+      body.html(text);
     }
     $("#user-view .suggestion").show();
   };
@@ -36,7 +57,7 @@ $(function() {
     $("#user-view .suggestion").hide();
   };
 
-  var displayCorrections = function(text, response) {
+  var displayCorrections = function(algo, text, response) {
     $('#user-entry').hide();
     $('#user-view').show();
 
@@ -62,8 +83,14 @@ $(function() {
       var prev = text.slice(0, start);
       var after = text.slice(end, text.length);
 
+      var explanation = changes[i].explanation || "";
+      var suggestions = changes[i].suggestions || [];
+      suggestions = suggestions.join("///");
       var span = '<mark data-symbol="' + changes[i].symbol + '" ';
-      span += '         data-selection="' + changes[i].selection + '">';
+      span += '         data-selection="' + changes[i].selection + '" ';
+      span += '         data-explanation="' + explanation + '" ';
+      span += '         data-suggestions="' + suggestions + '" ';
+      span += '         data-algo="' + algo + '">';
       text = prev + span + changes[i].selection + "</mark>" + after;
     }
 
@@ -93,7 +120,7 @@ $(function() {
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(response) {
-        displayCorrections(text, response);
+        displayCorrections(algo, text, response);
     });
   });
 
