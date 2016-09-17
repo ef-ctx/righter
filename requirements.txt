@@ -1,5 +1,6 @@
 beautifulsoup4==4.5.1
 Flask==0.11.1
+gunicorn==19.6.0
 lxml==3.5.0
 pyenchant==1.6.8
 regex==2016.8.27
