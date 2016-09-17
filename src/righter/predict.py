@@ -13,6 +13,7 @@ algorithms = {
     "ginger": ginger.check,
     "language-tool": language_tool.check,
     "righter": righter.check,
+    "pyenchant": pyenchant.check_hunspell,
     "pyenchant-hunspell": pyenchant.check_hunspell,
     "pyenchant-aspell": pyenchant.check_aspell,
     "whitesmoke": whitesmoke.check,
@@ -22,6 +23,16 @@ algorithms = {
 
 class AlgorithmNotFound(Exception):
     pass
+
+
+def apply_algorithm(algorithm, text):
+    """
+    Predict English mistakes using the algorithm of choice.
+    """
+    check = algorithms.get(algorithm)
+    if not check:
+        raise AlgorithmNotFound()
+    return check(text)
 
 
 if __name__ == '__main__':
