@@ -25,6 +25,9 @@ $(function() {
         text += "<li>Name of countries and languages</li>";
         body.html(text);
         break;
+      default:
+        // Do not show explanation box
+        return;
     }
     $("#user-view .suggestion").show();
   };
@@ -33,9 +36,20 @@ $(function() {
     $("#user-view .suggestion").hide();
   };
 
-  var displayCorrections = function(item) {
+  var displayCorrections = function(resp) {
     $('#user-entry').hide();
     $('#user-view').show();
+
+    var item = resp.item;
+    var analysis = resp.analysis;
+
+    if (analysis) {
+        $(".precision").html(analysis.precision);
+        $(".recall").html(analysis.recall);
+    } else {
+        $(".precision").html("");
+        $(".recall").html("");
+    }
 
     // sort in descending order, so added <span>s don't mess up the offset.
     item.changes.sort(function(a, b) {
@@ -49,15 +63,14 @@ $(function() {
       var prev = text.slice(0, start);
       var after = text.slice(end, text.length);
 
-      var span = '<div data-symbol="' + item.changes[i].symbol + '" ';
-      span += '        data-selection="' + item.changes[i].selection + '" ';
-      span += '        class="highlight">';
-      text = prev + span + item.changes[i].selection + "</div>" + after;
+      var span = '<mark data-symbol="' + item.changes[i].symbol + '" ';
+      span += '         data-selection="' + item.changes[i].selection + '">';
+      text = prev + span + item.changes[i].selection + "</mark>" + after;
     }
 
     $("#user-view .text").html(text);
 
-    $('#user-view .highlight').hover(showSuggestion, hideSuggestion);
+    $('#user-view mark').hover(showSuggestion, hideSuggestion);
   };
 
   $('#user-view .btn').on('click', function() {
@@ -66,14 +79,28 @@ $(function() {
     $('#user-entry').show();
   });
 
-  $('#user-entry button').on('click', function() {
+  $('#user-entry .btn-primary').on('click', function() {
     var text = $('#user-entry textarea').val();
+    var id = $('#id').val();
+    var algo = $("#algorithm option:selected").val();
 
     // disable button before sending
     $('#user-entry button').prop('disabled', true);
     // send text to API
+    $.ajax({
+        url: "http://localhost:8000/corr",
+        data: {text: text, id: id, algorithm: algo},
+        dataType: "json"
+    }).done(displayCorrections);
+  });
 
-    // this will be called from an ajax callback, probably
-    displayCorrections({"nationality": "cn", "text": "\n            Dear Julia, I'm very angry because I did most of the chores this week.  I did the ironing and washed dishes on Monday. I washed the dishes and made the beds on Tuseday. I washed the dishes on Wednesday and Friday too. I made dinner, washed the dishes, make the beds and paied the bills on Thursday. I swept the floor, mopped the floor and do the shopping on Saturday. I did the laundry and Vacuumed on Sunday.\n            ", "changes": [{"selection": "Vacuumed", "start": 403, "symbol": "C"}, {"selection": "Tuseday", "start": 173, "symbol": "SP"}, {"selection": "paied", "start": 283, "symbol": "SP"}], "id": "C221982", "level": "4"});
+  $('#example').on('click', function() {
+    $.ajax({
+        url: "http://localhost:8000/example",
+        dataType: "json"
+    }).done(function(json) {
+        $('#id').val(json.id);
+        $('#text-entry').html(json.text);
+    });
   });
 });
