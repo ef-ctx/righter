@@ -136,6 +136,26 @@ def evaluate_text(text=TEXT):
     return analysis_list
 
 
+def check(text):
+    global connection
+    while not connection:
+        try:
+            connection = connect()
+        except ssl.SSLError as e:
+            print(e)
+            time.sleep(2)
+
+    try:
+        changes = evaluate_text(text)
+    except Exception as e:
+        traceback.print_exc(file=sys.stdout)
+        print("EXCEPTION!!!! ", i)
+        print(e)
+
+    
+    return sorted(changes, key=lambda i: i["start"])
+
+
 def main(input_filename, output_filename):
     global connection
     connection = connect()
@@ -168,6 +188,9 @@ def main(input_filename, output_filename):
                             print(e)
                             time.sleep(2)
                 i += 1
+
+
+connection = connect()
 
 
 if __name__ == "__main__":

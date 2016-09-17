@@ -2,6 +2,7 @@ import json
 import argparse
 
 import righter
+from righter.competitor import grammarly
 from righter.competitor import ginger
 from righter.competitor import language_tool
 from righter.competitor import pyenchant
@@ -12,6 +13,7 @@ from righter.log import logger
 
 algorithms = {
     "ginger": ginger.check,
+    "grammarly": grammarly.check,
     "language-tool": language_tool.check,
     "righter": righter.check,
     "pyenchant": pyenchant.check_hunspell,

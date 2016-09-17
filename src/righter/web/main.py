@@ -160,10 +160,10 @@ def predict():
     types = request_body.get("types") or ["AR", "C", "SP"]
     changes = apply_algorithm(request_body["algorithm"], request_body["text"])
     body = {
-        "changes": [i for i in changes if i["symbol"] in types]
+        "changes": [i for i in changes if i.get("symbol") in types]
     }
     if (request_body["id"] == "C178718") and (request_body["text"] == ESSAY_C178718["text"]):
-        annotated = {item["start"] for item in ESSAY_C178718["changes"] if item["symbol"] in types}
+        annotated = {item["start"] for item in ESSAY_C178718["changes"] if item.get("symbol") in types}
         predicted = {item["start"] for item in body["changes"]}
         body["analysis"] = {
             "precision": precision(annotated, predicted),

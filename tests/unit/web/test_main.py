@@ -73,7 +73,7 @@ class MainTestCase(unittest.TestCase):
     def test_static_index(self):
         response = self.app.get('/static/index.html')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.get_data(), b'<p>\nhello\n</p>\n')
+        self.assertIn(b'<title>Righter</title><', response.get_data())
 
     def test_retrieve_random_essay(self):
         response = self.app.get('/essays?random=1')
@@ -95,7 +95,7 @@ class MainTestCase(unittest.TestCase):
         expected.pop("nationality")
         self.assertEqual(received, expected)
 
-    def test_predict_essay_C17871(self):
+    def test_predict_essay_C17871_with_righter(self):
         decorated_essay = dict(ESSAY_C178718)
         decorated_essay["algorithm"] = "righter"
         response = self.app.post(
@@ -121,4 +121,81 @@ class MainTestCase(unittest.TestCase):
                 'recall': 0.8888888888888888
             }
         }
+        self.assertEqual(received, expected)
+
+    def test_predict_essay_C178701_with_grammarly(self):
+        decorated_essay = dict(ESSAY_C178718)
+        decorated_essay["algorithm"] = "grammarly"
+        response = self.app.post(
+            '/predict',
+            data=json.dumps(decorated_essay),
+            content_type='application/json'
+        )
+        self.assertEqual(response.status_code, 200)
+        received = json.loads(response.get_data().decode())
+        expected = {
+            'analysis': {
+                'precision': 0.8,
+                'recall': 0.4444444444444444
+            },
+            'changes': [
+                {
+                    'explanation': '<p>The word <b>styly</b>&nbsp;is not in&nbsp;our '
+                        'dictionary. If&nbsp;you’re sure this spelling '
+                        'is&nbsp;correct, you can add '
+                        'it&nbsp;to&nbsp;your personal dictionary '
+                        'to&nbsp;prevent future alerts.\n',
+                    'originalSymbol': 'Spelling.Misspelled.General',
+                    'selection': 'styly',
+                    'start': 120,
+                    'suggestions': ['style', 'styles', 'stay'],
+                    'symbol': 'SP'
+                },
+                {
+                    'explanation': '<p>It&nbsp;appears that the possessive pronoun '
+                        '<b>your</b> should be&nbsp;a&nbsp;contraction '
+                        'instead. Consider changing&nbsp;it.\n',
+                    'originalSymbol': 'Spelling.CommonlyConfused.ItsYourTheir',
+                    'selection': 'your',
+                    'start': 260,
+                    'suggestions': ["you're", 'you are'],
+                    'symbol': 'SP'
+                },
+                {
+                    'explanation': '<p>The word <b>databse</b>&nbsp;is not '
+                        'in&nbsp;our dictionary. If&nbsp;you’re sure this '
+                        'spelling is&nbsp;correct, you can add '
+                        'it&nbsp;to&nbsp;your personal dictionary '
+                        'to&nbsp;prevent future alerts.\n',
+                    'originalSymbol': 'Spelling.Misspelled.General',
+                    'selection': 'databse',
+                    'start': 353,
+                    'suggestions': ['database', 'databases', 'data base'],
+                    'symbol': 'SP'
+                },
+                {
+                    'explanation': '<p>The word <b>carful</b> doesn’t seem '
+                        'to&nbsp;fit this context. Consider replacing '
+                        'it&nbsp;with a&nbsp;different one.\n',
+                    'originalSymbol': 'Spelling.AccidentallyConfused.General',
+                    'selection': 'carful',
+                    'start': 379,
+                    'suggestions': ['careful'],
+                    'symbol': 'SP'
+                },
+                {
+                    'explanation': '<p>The word <b>mannagement</b>&nbsp;is not '
+                        'in&nbsp;our dictionary. If&nbsp;you’re sure this '
+                        'spelling is&nbsp;correct, you can add '
+                        'it&nbsp;to&nbsp;your personal dictionary '
+                        'to&nbsp;prevent future alerts.\n',
+                    'originalSymbol': 'Spelling.Misspelled.General',
+                    'selection': 'mannagement',
+                    'start': 396,
+                    'suggestions': ['management', 'managements', "management's"],
+                    'symbol': 'SP'
+                }
+            ]
+        }
+
         self.assertEqual(received, expected)
