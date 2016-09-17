@@ -2,5 +2,6 @@ libenchant1c2a
 libxml2-dev
 libxslt1-dev
 libxs-dev
-python-dev
+openjdk-8-jre
+python3-dev
 zlib1g-dev
