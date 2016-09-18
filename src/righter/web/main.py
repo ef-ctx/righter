@@ -2,6 +2,9 @@
 How to run from root:
 PYTHONPATH=`pwd`/src:$PYTHONPATH python -m righter.web.main
 """
+import json
+import random
+
 from flask import Flask, jsonify, request, send_from_directory
 
 from righter.analyse import precision, recall
@@ -22,59 +25,9 @@ SUPPORTED_ALGORITHMS = [
 ]
 
 
-ESSAY_C178718 = {
-    "id": "C178718",
-    "text": "\n            Dear James, How are you?  Some serious problems have been brought to my attention relating to your working styly and habits. This is a formal letter of warning to ask you to improve your work. let me outline the areas in which you need to improve your communicate with colleagues.You often doesn't think about teamwork and never update the databse. You must be more carful with time mannagement. You has been late for appointments before.You must be more tidy because this is your workplace. You must be more professional. I am looking forward that you will become better, otherwise you will out of here. Yours sincerely, Paul\n            ",
-     "nationality": "cn",
-     "changes": [
-        {
-            "selection": "James",
-            "start": 18,
-            "symbol": "C"
-        },
-        {
-            "selection": "How",
-            "start": 25,
-            "symbol": "C"
-        },
-        {
-            "selection": "let",
-            "start": 206,
-            "symbol": "C"
-        },
-        {
-            "selection": "Paul",
-            "start": 635,
-            "symbol": "C"
-        },
-        {
-            "selection": "styly",
-            "start": 120,
-            "symbol": "SP"
-        },
-        {
-            "selection": "doesn",
-            "start": 303,
-            "symbol": "SP"
-        },
-        {
-            "selection": "databse",
-            "start": 353,
-            "symbol": "SP"
-        },
-        {
-            "selection": "carful",
-            "start": 379,
-            "symbol": "SP"
-        },
-        {
-            "selection": "mannagement",
-            "start": 396,
-            "symbol": "SP"
-        }
-    ],
-    "level": "7"
-}
+with open("data/dataset-2-1000-lines.json") as fp:
+    writings = json.load(fp)
+    writings_ids = list(writings.keys())
 
 
 @app.route('/')
@@ -107,7 +60,8 @@ def essays_collection():
         response = jsonify({u"error": "Requires query string random=1"})
         response.status_code = 500
     else:
-        body = dict(ESSAY_C178718)
+        random_id = random.choice(writings_ids)
+        body = dict(writings[random_id])
         body.pop("changes")
         body.pop("level")
         body.pop("nationality")
@@ -124,11 +78,11 @@ def essay_instance(essay_id):
         "text": <string>
     }
     """
-    if essay_id != "C178718":
+    if essay_id not in writings_ids:
         response = jsonify({u"error": "Inexistent essay"})
         response.status_code = 400
     else:
-        body = dict(ESSAY_C178718)
+        body = dict(writings[essay_id])
         body.pop("changes")
         body.pop("level")
         body.pop("nationality")
@@ -162,8 +116,9 @@ def predict():
     body = {
         "changes": [i for i in changes if ignore_type or i.get("symbol") in types]
     }
-    if (request_body["id"] == "C178718") and (request_body["text"] == ESSAY_C178718["text"]):
-        annotated = {item["start"] for item in ESSAY_C178718["changes"] if item.get("symbol") in types}
+    desired_id = request_body["id"]
+    if (desired_id in writings_ids) and (request_body["text"] == writings[desired_id]["text"]):
+        annotated = {item["start"] for item in writings[desired_id]["changes"] if item.get("symbol") in types}
         predicted = {item["start"] for item in body["changes"]}
         body["analysis"] = {
             "precision": precision(annotated, predicted),
