@@ -10,9 +10,6 @@ DEFAULT_SYMBOL_CONVERSION = {
 
 # Mistakes that are not mapped on our annotated data
 IGNORE_RULES = [
-    "SENTENCE_WHITESPACE",
-    "WHITESPACE_RULE",
-    "COMMA_PARENTHESIS_WHITESPACE",
     "EN_UNPAIRED_BRACKETS"
 ]
 
