@@ -2,12 +2,12 @@ $(function() {
   var showSuggestion = function() {
     var title = $('#suggestion-title');
     var body = $('#suggestion-body');
-    var selection = $(this).data("selection");
+    var selection = decodeURIComponent($(this).data("selection"));
     var algo = $(this).data("algo");
-    var explanation = $(this).data("explanation");
-    var suggestions = $(this).data("suggestions").split("///").filter(function(e) {return e != ""});
+    var explanation = decodeURIComponent($(this).data("explanation"));
+    var suggestions = decodeURIComponent($(this).data("suggestions")).split("///").filter(function(e) {return e != ""});
     var righterText;
-    switch ($(this).data("symbol")) {
+    switch (decodeURIComponent($(this).data("symbol"))) {
       case "AR":
         title.html("Incorrect article usage");
         righterText = "We use <em>a</em> or <em>an</em> when a noun is new or unknown. We use <em>a</em>";
@@ -61,7 +61,6 @@ $(function() {
     $('#user-entry').hide();
     $('#user-view').show();
 
-    var changes = response.changes;
     var analysis = response.analysis;
 
     if (analysis) {
@@ -73,9 +72,22 @@ $(function() {
     }
 
     // sort in descending order, so added <span>s don't mess up the offset.
-    changes.sort(function(a, b) {
+    var changes = []
+    response.changes.sort(function(a, b) {
       return b.start - a.start;
     });
+    if (response.changes.length > 1) {
+      for (var i = 0; i < response.changes.length-1; i++) {
+        var end = response.changes[i+1].start + response.changes[i+1].selection.length;
+        if (response.changes[i].start > end) {
+          changes.push(response.changes[i]);
+        }
+      }
+      changes.push(response.changes[response.changes.length-1]);
+    } else {
+      changes = response.changes;
+    }
+
     for (var i = 0; i < changes.length; i++) {
       var start = changes[i].start;
       var end = start + changes[i].selection.length;
@@ -83,13 +95,15 @@ $(function() {
       var prev = text.slice(0, start);
       var after = text.slice(end, text.length);
 
+      var symbol = changes[i].symbol || "";
+      var selection = changes[i].selection || "";
       var explanation = changes[i].explanation || "";
       var suggestions = changes[i].suggestions || [];
       suggestions = suggestions.join("///");
-      var span = '<mark data-symbol="' + changes[i].symbol + '" ';
-      span += '         data-selection="' + changes[i].selection + '" ';
-      span += '         data-explanation="' + explanation + '" ';
-      span += '         data-suggestions="' + suggestions + '" ';
+      var span = '<mark data-symbol="' + encodeURIComponent(symbol) + '" ';
+      span += '         data-selection="' + encodeURIComponent(selection) + '" ';
+      span += '         data-explanation="' + encodeURIComponent(explanation) + '" ';
+      span += '         data-suggestions="' + encodeURIComponent(suggestions) + '" ';
       span += '         data-algo="' + algo + '">';
       text = prev + span + changes[i].selection + "</mark>" + after;
     }
