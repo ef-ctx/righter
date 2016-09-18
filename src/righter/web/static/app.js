@@ -5,7 +5,7 @@ $(function() {
     var selection = $(this).data("selection");
     var algo = $(this).data("algo");
     var explanation = $(this).data("explanation");
-    var suggestions = $(this).data("suggestions").split("///");
+    var suggestions = $(this).data("suggestions").split("///").filter(function(e) {return e != ""});
     var righterText;
     switch ($(this).data("symbol")) {
       case "AR":
@@ -29,8 +29,8 @@ $(function() {
         righterText += "<li>Name of countries and languages</li>";
         break;
       default:
-        // Do not show explanation box
-        return;
+        title.html("Incorrect");
+        break;
     }
     var text = "";
     if (explanation) {
@@ -108,7 +108,14 @@ $(function() {
   $('#user-entry .btn-primary').on('click', function() {
     var text = $('#user-entry textarea').val();
     var id = $('#id').val();
+    var corrections = $('#corrections option:selected').val();
     var algo = $("#algorithm option:selected").val();
+
+    var ignoreType = false;
+
+    if (corrections == "any") {
+      ignoreType = true;
+    }
 
     // disable button before sending
     $('#user-entry button').prop('disabled', true);
@@ -116,7 +123,7 @@ $(function() {
     $.ajax({
         url: "/predict",
         method: "POST",
-        data: JSON.stringify({text: text, id: id, algorithm: algo}),
+        data: JSON.stringify({text: text, id: id, algorithm: algo, ignoreType: ignoreType}),
         contentType: "application/json; charset=utf-8",
         dataType: "json"
     }).done(function(response) {

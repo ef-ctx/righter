@@ -47,6 +47,11 @@
         baseline that we hope to beat.</p>
       </div>
       <form id="user-entry" class="col-md-8">
+        <label for="corrections">Enabled corrections</label>
+        <select class="form-control" id="corrections">
+          <option value="sp-ar-c" selected>Articles, capitalization and spelling</option>
+          <option value="any">All corrections</option>
+        </select>
         <label for="algorithm">Algorithm</label>
         <select class="form-control" id="algorithm">
           <option value="righter" selected>Righter</option>
@@ -56,7 +61,7 @@
           <option value="pyenchant">Pyenchant</option>
           <option value="whitesmoke">Whitesmoke</option>
         </select>
-        <div style="display:none" id="id"></div>
+        <input type="hidden" name="id" id="id">
         <label for="text-entry">Text</label>
         <textarea id="text-entry" class="form-control" rows="10" placeholder="Type in your text ..."></textarea>
         <button type="submit" class="btn btn-primary">
