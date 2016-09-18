@@ -20,8 +20,9 @@ def check(text):
     for re in regexes:
         for match in re.finditer(text):
             start = match.start()
-            changes.append({
-                'start': start,
-                'selection': text[start:match.end()]
-            })
+            if all(start != change['start'] for change in changes):
+                changes.append({
+                    'start': start,
+                    'selection': text[start:match.end()]
+                })
     return changes
