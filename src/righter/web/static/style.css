@@ -42,6 +42,9 @@ textarea {
 }
 
 #algorithm {
-    display: block;
+    margin-bottom: 10px;
+}
+
+#corrections {
     margin-bottom: 10px;
 }
